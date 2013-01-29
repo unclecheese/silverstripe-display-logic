@@ -200,7 +200,7 @@ class DisplayLogicCriteria extends Object {
 	 * @return string
 	 */
 	public function toScript() {
-		$script .= "(";
+		$script = "(";
 		$first = true;
 		foreach($this->getCriteria() as $c) {
 			$script .= $first ? "" :  " {$this->getLogicalOperator()} ";

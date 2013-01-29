@@ -11,7 +11,7 @@
         <% end_if %>    
     </div>
     <% if DisplayLogic %>
-    <script type="text/template" class="display-logic-eval">$DisplayLogic</script>
+    <div class="display-logic-eval">$DisplayLogic</script>
     <% end_if %>    
 </div>
 
