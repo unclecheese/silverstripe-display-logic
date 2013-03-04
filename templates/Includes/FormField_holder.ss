@@ -7,6 +7,6 @@
 	<% if Message %><span class="message $MessageType">$Message</span><% end_if %>
 
 	<% if DisplayLogic %>
-	<script type="text/template" class="display-logic-eval">$DisplayLogic</script>
+	<div class="display-logic-eval">$DisplayLogic</div>
 	<% end_if %>
 </div>
