@@ -14,3 +14,7 @@ DisplayLogicCriteria:
     - hasCheckedOption
     - hasCheckedAtLeast
     - hasCheckedLessThan
+    
+FormField:
+  extensions:
+    - DisplayLogicFormField
