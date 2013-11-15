@@ -127,6 +127,16 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
 	}
 ```
 
+## Dealing with non-standard form fields
+Sometimes you will want to wrap display logic around a form field that does not use the standard FormField template, such as GridField or LiteralField. For these cases, you can wrap the form field in DisplayLogicWrapper().
+```php
+$fields->addFieldToTab("Root.Main", DisplayLogicWrapper::create(
+		LiteralField::create("foo","<h2>Hello</h2>")
+	)
+	->displayIf("Title")->isEmpty()->end()
+);
+```
+
 ## What's the difference between displayIf() and hideUnless()?
 Not much. hideUnless() will take a CSS class that hides it by default before the script loads, to eliminate any flash of form fields before the script has loaded. In general, use displayIf() when the common case is for the field to be hidden, and hideUnless() when the common case is for the field to be shown.
 The same logic applies to hideIf() and displayUnless().
