@@ -17,7 +17,7 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
            ->andIf()
               ->group()
                 ->orIf("RushShipping")->isChecked()
-                ->orIf("ShippingAddress")->isNotEmpty();
+                ->orIf("ShippingAddress")->isNotEmpty()
               ->end();
 ```
 
