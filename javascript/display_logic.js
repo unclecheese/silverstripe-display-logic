@@ -16,7 +16,7 @@
 			return this.getFormField().val();
 		},
 
-		evaluateEqualTo: function(val) {
+		evaluateEqualTo: function(val) {			
 			return this.getFieldValue() === val;
 		},
 
@@ -155,7 +155,7 @@
 
 
 
-	$('.field.display-logic-master :text, .field.display-logic-master select').entwine({
+	$('.field.display-logic-master :text, .field.display-logic-master :hidden, .field.display-logic-master select').entwine({
 		onmatch: function() {
 			this.closest(".field").notify();
 		},
