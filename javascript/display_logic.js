@@ -96,7 +96,9 @@
 		},
 
 		getMasters: function() {
-			return this.data('display-logic-masters').split(",");
+			var masters = this.data('display-logic-masters');
+
+			return (masters) ? masters.split(",") : [];
 		}
 
 	});
