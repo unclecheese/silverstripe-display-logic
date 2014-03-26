@@ -117,9 +117,12 @@
 	$('.field.optionset.checkboxset').entwine({
 
 		evaluateHasCheckedOption: function(val) {
-			this.find(':checkbox').filter(':checked').each(function() {
-				return $(this).val() === val || $(this).getLabel() === val;
+			var found = false;
+			this.find(':checkbox').filter(':checked').each(function() {				
+				found = (found || ($(this).val() === val || $(this).getLabel().text() === val));
 			})
+
+			return found;
 		},
 
 		evaluateHasCheckedAtLeast: function(num) {
