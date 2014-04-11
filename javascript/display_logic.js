@@ -17,7 +17,7 @@
 			return this.getFormField().val();
 		},
 
-		evaluateEqualTo: function(val) {			
+		evaluateEqualTo: function(val) {
 			return this.getFieldValue() === val;
 		},
 
@@ -58,7 +58,7 @@
 		evaluateBetween: function(minmax) {
 			var v = parseFloat(this.getFieldValue());
 			var parts = minmax.split("-");
-			if(parts.length === 2) {				
+			if(parts.length === 2) {
 				return v > parseFloat(parts[0]) && v < parseFloat(parts[1]);
 			}
 			return false;
@@ -73,9 +73,9 @@
 
 	$('.field.display-logic').entwine({
 		onmatch: function () {
-			var masters = this.getMasters();			
+			var masters = this.getMasters();
 			for(var m in masters) {
-				this.closest('form').find('#'+masters[m]).addClass("display-logic-master");				
+				this.closest('form').find('#'+masters[m]).addClass("display-logic-master");
 			}
 		},
 
@@ -85,7 +85,7 @@
 
 		parseLogic: function() {
 			var js = this.getLogic();
-			var result = eval(js);	
+			var result = eval(js);
 			return result;
 		},
 
@@ -100,7 +100,7 @@
 
 	$('.field.optionset').entwine({
 		getFormField: function() {
-			var f = this._super().filter(":checked");			
+			var f = this._super().filter(":checked");
 			return f;
 		}
 	});
@@ -119,7 +119,7 @@
 		},
 
 		evaluateHasCheckedLessThan: function(num) {
-			return this.find(':checked').length <= num;	
+			return this.find(':checked').length <= num;
 		}
 	});
 
@@ -146,7 +146,7 @@
 	});
 
 
-	$('.field.display-logic-master :text, .field.display-logic-master :hidden, .field.display-logic-master select').entwine({
+	$('.field.display-logic-master :text, .field.display-logic-master :hidden:not(option), .field.display-logic-master select').entwine({
 		onmatch: function() {
 			this.closest(".field").notify();
 		},
@@ -156,14 +156,14 @@
 		}
 
 	});
-	
+
 
 	$('.field.display-logic-master :checkbox, .field.display-logic-master :radio').entwine({
-		onmatch: function() {			
+		onmatch: function() {
 			this.closest(".field").notify();
 		},
 
-		onclick: function() {			
+		onclick: function() {
 			this.closest(".field").notify();
 		}
 	});
@@ -174,7 +174,7 @@
 
 		notify: function() {
 			var self = this;
-			$.each(this.getListeners(), function() {				
+			$.each(this.getListeners(), function() {
 				$(this).testLogic();
 			});
 		},
