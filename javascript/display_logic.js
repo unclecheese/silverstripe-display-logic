@@ -157,10 +157,7 @@
 	});
 
 
-
-
-
-	$('.field.display-logic-master :text, .field.display-logic-master :hidden, .field.display-logic-master select').entwine({
+	$('.field.display-logic-master :text, .field.display-logic-master :hidden:not(option), .field.display-logic-master select').entwine({
 		onmatch: function() {
 			this.closest(".field").notify();
 		},
