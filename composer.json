@@ -15,8 +15,7 @@
     ],
     "require":
     {
-        "silverstripe/framework": "3.*",
-	    "silverstripe/cms": "3.*"
+        "silverstripe/framework": "3.*"
     },
     "extra": {
 	"installer-name": "display_logic"
