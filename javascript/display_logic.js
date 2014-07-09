@@ -1,22 +1,23 @@
 (function($) {
-//$.entwine('ss', function($) {
+
+	"use strict"
 
 	$('.field').entwine({
 
 		getFormField: function() {
-			return this.find('[name='+this.getFieldName()+']');
+			var field = this.closest('form').find('[name='+this.getFieldName()+']');
+			return field;
 		},
 
 		getFieldName: function() {
 			return this.attr('id');
 		},
 
-
 		getFieldValue: function() {
 			return this.getFormField().val();
 		},
 
-		evaluateEqualTo: function(val) {			
+		evaluateEqualTo: function(val) {
 			return this.getFieldValue() === val;
 		},
 
@@ -24,18 +25,13 @@
 			return this.getFieldValue() !== val;
 		},
 
-		evaluateLessThan: function(val) {
-			num = parseFloat(val);
-			return this.getFieldValue() < num;
-		},
-
 		evaluateGreaterThan: function(val) {
-			num = parseFloat(val);
+			var num = parseFloat(val);
 			return parseFloat(this.getFieldValue()) > num;
 		},
 
 		evaluateLessThan: function(val) {
-			num = parseFloat(val);
+			var num = parseFloat(val);
 			return parseFloat(this.getFieldValue()) < num;
 		},
 
@@ -60,9 +56,9 @@
 		},
 
 		evaluateBetween: function(minmax) {
-			v = parseFloat(this.getFieldValue());
-			parts = minmax.split("-");
-			if(parts.length === 2) {				
+			var v = parseFloat(this.getFieldValue());
+			var parts = minmax.split("-");
+			if(parts.length === 2) {
 				return v > parseFloat(parts[0]) && v < parseFloat(parts[1]);
 			}
 			return false;
@@ -75,13 +71,11 @@
 
 	});
 
-
-
 	$('.field.display-logic').entwine({
 		onmatch: function () {
-			masters = this.getMasters();			
-			for(m in masters) {
-				this.closest('form').find('#'+masters[m]).addClass("display-logic-master");				
+			var masters = this.getMasters();
+			for(var m in masters) {
+				this.closest('form').find('#'+masters[m]).addClass("display-logic-master");
 			}
 		},
 
@@ -90,8 +84,8 @@
 		},
 
 		parseLogic: function() {
-			js = this.getLogic();
-			result = eval(js);			
+			var js = this.getLogic();
+			var result = eval(js);
 			return result;
 		},
 
@@ -105,12 +99,10 @@
 
 
 	$('.field.optionset').entwine({
-
 		getFormField: function() {
-			f = this._super().filter(":checked");			
+			var f = this._super().filter(":checked");
 			return f;
 		}
-
 	});
 
 
@@ -130,7 +122,7 @@
 		},
 
 		evaluateHasCheckedLessThan: function(num) {
-			return this.find(':checked').length <= num;	
+			return this.find(':checked').length <= num;
 		}
 	});
 
@@ -165,39 +157,41 @@
 		onchange: function() {
 			this.closest(".field").notify();
 		}
+
 	});
-	
+
 
 	$('.field.display-logic-master :checkbox, .field.display-logic-master :radio').entwine({
-		onmatch: function() {			
+		onmatch: function() {
 			this.closest(".field").notify();
 		},
 
-		onclick: function() {			
+		onclick: function() {
 			this.closest(".field").notify();
 		}
 	});
-
 
 
 	$('.field.display-logic-master').entwine({
 		Listeners: null,
 
 		notify: function() {
-			$.each(this.getListeners(), function() {				
+			var self = this;
+			$.each(this.getListeners(), function() {
 				$(this).testLogic();
 			});
 		},
 
 		getListeners: function() {
+			var l;
 			if(l = this._super()) {
 				return l;
 			}
 			var self = this;
 			var listeners = [];
 			this.closest("form").find('.display-logic').each(function() {
-				masters = $(this).getMasters();
-				for(m in  masters) {
+				var masters = $(this).getMasters();
+				for(var m in masters) {
 					if(masters[m] == self.attr('id')) {
 						listeners.push($(this));
 						break;
@@ -210,18 +204,11 @@
 	});
 
 
-	$('.field.display-logic-master.checkboxset').entwine({
-
-	})
-
-
-
-
 	$('.field.display-logic *').entwine({
 		getHolder: function() {
 			return this.closest('.display-logic');
 		}
 	});
 
-//})
+
 })(jQuery);

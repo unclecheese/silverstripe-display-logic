@@ -101,9 +101,9 @@ class DisplayLogicFormField extends DataExtension {
 	 */
 	public function DisplayLogic() {
 		if($this->displayLogicCriteria) {
-			Requirements::javascript(THIRDPARTY_DIR.'/jquery-entwine/dist/jquery.entwine-dist.js');
-			Requirements::javascript(DISPLAY_LOGIC_DIR.'/javascript/display_logic.js');
-			Requirements::css(DISPLAY_LOGIC_DIR.'/css/display_logic.css');
+			//Requirements::javascript(THIRDPARTY_DIR.'/jquery-entwine/dist/jquery.entwine-dist.js');
+			//Requirements::javascript(DISPLAY_LOGIC_DIR.'/javascript/display_logic.js');
+			//Requirements::css(DISPLAY_LOGIC_DIR.'/css/display_logic.css');
 
 			return $this->displayLogicCriteria->toScript();
 		}

@@ -1,3 +1,9 @@
+LeftAndMain:
+  extra_requirements_css:
+    - display_logic/css/display_logic.css
+  extra_requirements_javascript:
+    - display_logic/javascript/display_logic.js
+
 DisplayLogicCriteria:
   comparisons:
     - isEqualTo
