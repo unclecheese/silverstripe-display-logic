@@ -77,7 +77,7 @@
 
 
 
-	$('.field.display-logic').entwine({
+	$('.field.display-logic:not(.readonly)').entwine({
 		onmatch: function () {
 			masters = this.getMasters();			
 			for(m in masters) {
