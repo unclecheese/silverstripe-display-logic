@@ -1,0 +1,22 @@
+DisplayLogicCriteria:
+  comparisons:
+    - isEqualTo
+    - isNotEqualTo
+    - isGreaterThan
+    - isLessThan
+    - contains
+    - startsWith
+    - endsWith
+    - isEmpty
+    - isNotEmpty
+    - isBetween
+    - isChecked
+    - hasCheckedOption
+    - hasCheckedAtLeast
+    - hasCheckedLessThan
+    
+FormField:
+  extensions:
+    - DisplayLogicFormField
+DisplayLogic:
+  jquery_included: true
