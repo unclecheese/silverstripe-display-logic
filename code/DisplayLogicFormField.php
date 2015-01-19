@@ -113,6 +113,11 @@ class DisplayLogicFormField extends DataExtension {
 	}
 
 
-
+	public function onBeforeRender($field) {
+		if($logic = $field->DisplayLogic()) {			
+			$field->setAttribute('data-display-logic-masters', $field->DisplayLogicMasters());
+			$field->setAttribute('data-display-logic-eval', $logic);
+		}
+	}
 
 }

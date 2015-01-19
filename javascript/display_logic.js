@@ -1,7 +1,7 @@
 (function($) {
 //$.entwine('ss', function($) {
 
-	$('.field').entwine({
+	$('div.display-logic, div.display-logic-master').entwine({
 
 		getFormField: function() {
 			return this.find('[name='+this.getFieldName()+']');
@@ -31,6 +31,7 @@
 
 		evaluateGreaterThan: function(val) {
 			num = parseFloat(val);
+			
 			return parseFloat(this.getFieldValue()) > num;
 		},
 
@@ -70,30 +71,44 @@
 
 		evaluateChecked: function() {
 			return this.getFormField().is(":checked");
-		}
+		},
 
-
-	});
-
-
-
-	$('.field.display-logic:not(.readonly)').entwine({
 		onmatch: function () {
+			
+			var allReadonly = true;
+			var masters = [];
+			var field = this.getFormField();
+
+			if(field.data('display-logic-eval') && field.data('display-logic-masters')) {
+				this.data('display-logic-eval', field.data('display-logic-eval'))
+					.data('display-logic-masters', field.data('display-logic-masters'));
+			}
+
 			masters = this.getMasters();			
+
 			for(m in masters) {
-				this.closest('form').find('#'+masters[m]).addClass("display-logic-master");				
+				var master = this.closest('form').find('#'+masters[m]);				
+				if(!master.is('.readonly')) allReadonly = false;
+				master.addClass("display-logic-master");				
+			}
+
+			// If all the masters are readonly fields, the field has no way of displaying.
+			if(masters.length && allReadonly) {				
+				this.show();
 			}
 		},
 
 		getLogic: function() {
-			return $.trim(this.find('.display-logic-eval').text());
+			return $.trim(this.data('display-logic-eval'));
 		},
 
 		parseLogic: function() {
-			js = this.getLogic();
-			result = eval(js);			
+			var js = this.getLogic();			
+			var result = new Function("return " + js).bind(this)();	
+			console.log('got result', result);	
 			return result;
 		},
+
 
 		getMasters: function() {
 			var masters = this.data('display-logic-masters');
@@ -132,6 +147,7 @@
 		evaluateHasCheckedLessThan: function(num) {
 			return this.find(':checked').length <= num;	
 		}
+
 	});
 
 
@@ -143,26 +159,26 @@
 
 
 
-	$('.field.display-logic.display-logic-display').entwine({
-		testLogic: function() {
+	$('div.display-logic.display-logic-display').entwine({
+		testLogic: function() {			
 			this.toggle(this.parseLogic());
 		}
 	});
 
 
-	$('.field.display-logic.display-logic-hide').entwine({
+	$('div.display-logic.display-logic-hide').entwine({
 		testLogic: function() {
 			this.toggle(!this.parseLogic());
 		}
 	});
 
 
-	$('.field.display-logic-master :text, .field.display-logic-master :hidden:not(option), .field.display-logic-master select').entwine({
+	$('.field.display-logic-master :input').entwine({
 		onmatch: function() {
 			this.closest(".field").notify();
 		},
 
-		onchange: function() {
+		onchange: function() {			
 			this.closest(".field").notify();
 		}
 	});
@@ -173,18 +189,24 @@
 			this.closest(".field").notify();
 		},
 
-		onclick: function() {			
+		onclick: function() {						
 			this.closest(".field").notify();
 		}
 	});
 
-
+	$('div.display-logic.optionset, div.display-logic-master.optionset').entwine({
+		getFieldValue: function () {
+			return this.find(':checked').val();
+		}
+	});	
 
 	$('.field.display-logic-master').entwine({
 		Listeners: null,
 
 		notify: function() {
-			$.each(this.getListeners(), function() {				
+			console.log('notify', this.getListeners());		
+			$.each(this.getListeners(), function() {
+				console.log(this, 'is testing logic');				
 				$(this).testLogic();
 			});
 		},

@@ -78,6 +78,10 @@ class DisplayLogicCriterion extends Object {
 	 * @return string
 	 */
 	public function toScript() {		
-		return "this.closest('form').find(\"#{$this->master}\").evaluate{$this->operator}(\"".addslashes($this->value)."\")";
+		return sprintf(
+			"this.closest('form').find('#%s').evaluate{$this->operator}('%s')",
+			$this->master,
+			addslashes($this->value)
+		);
 	}
 }
