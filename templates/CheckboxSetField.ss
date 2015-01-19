@@ -1,4 +1,4 @@
-<ul id="$ID" class="$extraClass" $AttributesHTML>
+<ul id="$ID" class="$extraClass" <% if $DisplayLogic || $DisplayLogicMasters %>name="$Name" data-display-logic-masters="$DisplayLogicMasters" data-display-logic-eval="$DisplayLogic"<% end_if %>>
 	<% if $Options.Count %>
 		<% loop $Options %>
 			<li class="$Class">

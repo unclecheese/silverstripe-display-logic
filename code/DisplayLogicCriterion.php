@@ -79,7 +79,11 @@ class DisplayLogicCriterion extends Object {
 	 */
 	public function toScript() {		
 		return sprintf(
+<<<<<<< HEAD
 			"this.closest('form').find('[name=%s]:input').eq(0).evaluate{$this->operator}('%s')",
+=======
+			"this.closest('form').find('#%s').evaluate{$this->operator}('%s')",
+>>>>>>> feature/remove-custom-templates
 			$this->master,
 			addslashes($this->value)
 		);
