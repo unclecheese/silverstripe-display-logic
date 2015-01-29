@@ -25,9 +25,14 @@ class DisplayLogicFormField extends DataExtension {
 	 * @return DisplayLogicCriteria
 	 */
 	public function displayIf($master) {
-		$this->owner->addExtraClass("display-logic display-logic-hidden display-logic-display");
-		return $this->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
+		$class ="display-logic display-logic-hidden display-logic-display";
+		$this->owner->addExtraClass($class);
 
+		if($this->owner->hasMethod('addHolderClass')) {
+			$this->owner->addHolderClass($class);
+		}
+
+		return $this->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
 	}
 
 
@@ -39,7 +44,13 @@ class DisplayLogicFormField extends DataExtension {
 	 * @return DisplayLogicCriteria
 	 */
 	public function hideIf($master) {
-		$this->owner->addExtraClass("display-logic display-logic-hide");
+		$class = "display-logic display-logic-hide";
+		$this->owner->addExtraClass($class);
+
+		if($this->owner->hasMethod('addHolderClass')) {
+			$this->owner->addHolderClass($class);
+		}
+
 		return $this->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
 	}
 

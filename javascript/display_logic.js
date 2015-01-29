@@ -84,12 +84,19 @@
 					.data('display-logic-masters', field.data('display-logic-masters'));
 			}
 
-			masters = this.getMasters();			
 
-			for(m in masters) {
-				var master = this.closest('form').find('#'+masters[m]);				
+			masters = this.getMasters();			
+			for(m in masters) {				
+				var master = this.closest('form').find('#'+masters[m]);		
 				if(!master.is('.readonly')) allReadonly = false;
-				master.addClass("display-logic-master");				
+
+				master.addClass("display-logic-master");
+				if(master.find('input[type=radio]').length) {
+					master.addClass('optionset');
+				}
+				if(master.find("input[type=checkbox]").length > 1) {
+					master.addClass('checkboxset');
+				}
 			}
 
 			// If all the masters are readonly fields, the field has no way of displaying.
@@ -103,9 +110,9 @@
 		},
 
 		parseLogic: function() {
-			var js = this.getLogic();			
+			var js = this.getLogic();	
 			var result = new Function("return " + js).bind(this)();	
-			console.log('got result', result);	
+
 			return result;
 		},
 
@@ -119,7 +126,7 @@
 	});
 
 
-	$('.field.optionset').entwine({
+	$('div.optionset').entwine({
 
 		getFormField: function() {
 			f = this._super().filter(":checked");			
@@ -129,7 +136,7 @@
 	});
 
 
-	$('.field.optionset.checkboxset').entwine({
+	$('div.checkboxset').entwine({
 
 		evaluateHasCheckedOption: function(val) {
 			var found = false;
@@ -140,7 +147,7 @@
 			return found;
 		},
 
-		evaluateHasCheckedAtLeast: function(num) {
+		evaluateHasCheckedAtLeast: function(num) {			
 			return this.find(':checked').length >= num;
 		},
 
@@ -151,7 +158,7 @@
 	});
 
 
-	$('.field input[type=checkbox]').entwine({
+	$('input[type=checkbox]').entwine({
 		getLabel: function() {
 			return this.closest('form').find('label[for='+this.attr('id')+']');
 		}
@@ -173,24 +180,24 @@
 	});
 
 
-	$('.field.display-logic-master :input').entwine({
+	$('div.display-logic-master :input').entwine({
 		onmatch: function() {
-			this.closest(".field").notify();
+			this.closest(".display-logic-master").notify();
 		},
 
 		onchange: function() {			
-			this.closest(".field").notify();
+			this.closest(".display-logic-master").notify();
 		}
 	});
 	
 
-	$('.field.display-logic-master :checkbox, .field.display-logic-master :radio').entwine({
+	$('div.display-logic-master :checkbox, div.display-logic-master :radio').entwine({
 		onmatch: function() {			
-			this.closest(".field").notify();
+			this.closest(".display-logic-master").notify();
 		},
 
-		onclick: function() {						
-			this.closest(".field").notify();
+		onclick: function() {				
+			this.closest(".display-logic-master").notify();
 		}
 	});
 
@@ -200,13 +207,11 @@
 		}
 	});	
 
-	$('.field.display-logic-master').entwine({
+	$('div.display-logic-master').entwine({
 		Listeners: null,
 
-		notify: function() {
-			console.log('notify', this.getListeners());		
-			$.each(this.getListeners(), function() {
-				console.log(this, 'is testing logic');				
+		notify: function() {	
+			$.each(this.getListeners(), function() {	
 				$(this).testLogic();
 			});
 		},
@@ -219,9 +224,9 @@
 			var listeners = [];
 			this.closest("form").find('.display-logic').each(function() {
 				masters = $(this).getMasters();
-				for(m in  masters) {
+				for(m in  masters) {					
 					if(masters[m] == self.attr('id')) {
-						listeners.push($(this));
+						listeners.push($(this)[0]);
 						break;
 					}
 				}
@@ -232,14 +237,14 @@
 	});
 
 
-	$('.field.display-logic-master.checkboxset').entwine({
+	$('div.display-logic-master.checkboxset').entwine({
 
 	})
 
 
 
 
-	$('.field.display-logic *').entwine({
+	$('div.display-logic *').entwine({
 		getHolder: function() {
 			return this.closest('.display-logic');
 		}
