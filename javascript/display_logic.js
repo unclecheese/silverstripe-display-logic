@@ -3,8 +3,16 @@
 
 	$('div.display-logic, div.display-logic-master').entwine({
 
+		escapeSelector: function(selector) {
+			return selector.replace(/(\[|])/g, '\\$1');
+		},
+
 		getFormField: function() {
-			return this.find('[name='+this.getFieldName()+']');
+			var name = this.getFieldName();
+			if (name) {
+				name = this.escapeSelector(name);
+			}
+			return this.find('[name='+name+']');
 		},
 
 		getFieldName: function() {
@@ -87,7 +95,7 @@
 
 			masters = this.getMasters();			
 			for(m in masters) {				
-				var master = this.closest('form').find('#'+masters[m]);		
+				var master = this.closest('form').find(this.escapeSelector('#'+masters[m]));
 				if(!master.is('.readonly')) allReadonly = false;
 
 				master.addClass("display-logic-master");
@@ -160,7 +168,7 @@
 
 	$('input[type=checkbox]').entwine({
 		getLabel: function() {
-			return this.closest('form').find('label[for='+this.attr('id')+']');
+			return this.closest('form').find('label[for='+this.getHolder().escapeSelector(this.attr('id'))+']');
 		}
 	})
 
