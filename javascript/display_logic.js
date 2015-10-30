@@ -30,6 +30,13 @@
 		},
 
 		nameToHolder: function (name) {
+			// Hack!
+			// Remove this when OptionsetField_holder.ss uses $HolderID
+			// as its div ID instead of $ID
+			if(this.closest('form').find('ul[name='+name+']').length) {
+				return name;
+			}
+
 			return this.getFormID()+'_'+name+'_Holder';			
 		},
 
