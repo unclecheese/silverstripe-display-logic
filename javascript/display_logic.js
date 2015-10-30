@@ -1,10 +1,14 @@
 (function($) {
-//$.entwine('ss', function($) {
-
 	$('div.display-logic, div.display-logic-master').entwine({
 
 		escapeSelector: function(selector) {
 			return selector.replace(/(\[|])/g, '\\$1');
+		},
+
+		findHolder: function(name) {
+			return this.closest('form').find(
+				this.escapeSelector('#'+this.nameToHolder(name))
+			);
 		},
 
 		getFormField: function() {
@@ -16,9 +20,22 @@
 		},
 
 		getFieldName: function() {
-			return this.attr('id');
+			var fieldID = this.attr('id');
+			
+			if(fieldID) {
+				return this.attr('id')
+						.replace(new RegExp('^'+this.getFormID()+'_'),'')
+						.replace(/_Holder$/,'');
+			}
 		},
 
+		nameToHolder: function (name) {
+			return this.getFormID()+'_'+name+'_Holder';			
+		},
+
+		getFormID: function () {
+			return this.closest('form').attr('id');
+		},
 
 		getFieldValue: function() {
 			return this.getFormField().val();
@@ -33,12 +50,13 @@
 		},
 
 		evaluateLessThan: function(val) {
-			num = parseFloat(val);
+			var num = parseFloat(val);
+
 			return this.getFieldValue() < num;
 		},
 
 		evaluateGreaterThan: function(val) {
-			num = parseFloat(val);
+			var num = parseFloat(val);
 			
 			return parseFloat(this.getFieldValue()) > num;
 		},
@@ -92,10 +110,12 @@
 					.data('display-logic-masters', field.data('display-logic-masters'));
 			}
 
+			masters = this.getMasters();
 
-			masters = this.getMasters();			
-			for(m in masters) {				
-				var master = this.closest('form').find(this.escapeSelector('#'+masters[m]));
+			for(m in masters) {	
+				var holderName = this.nameToHolder(masters[m]);
+			
+				var master = this.closest('form').find(this.escapeSelector('#'+holderName));
 				if(!master.is('.readonly')) allReadonly = false;
 
 				master.addClass("display-logic-master");
@@ -126,7 +146,7 @@
 
 
 		getMasters: function() {
-			var masters = this.data('display-logic-masters');
+			var masters = this.getFormField().data('display-logic-masters');
 
 			return (masters) ? masters.split(",") : [];
 		}
@@ -233,7 +253,7 @@
 			this.closest("form").find('.display-logic').each(function() {
 				masters = $(this).getMasters();
 				for(m in  masters) {					
-					if(masters[m] == self.attr('id')) {
+					if(self.nameToHolder(masters[m]) == self.attr('id')) {
 						listeners.push($(this)[0]);
 						break;
 					}
@@ -244,13 +264,15 @@
 		}
 	});
 
+	$('div.display-logic.displaylogicwrapper.display-logic-display').entwine({
+		getFormField: function () {
+			return this;
+		},
 
-	$('div.display-logic-master.checkboxset').entwine({
-
-	})
-
-
-
+		getFieldName: function () {
+			return ''
+		}
+	});
 
 	$('div.display-logic *').entwine({
 		getHolder: function() {
@@ -258,5 +280,4 @@
 		}
 	});
 
-//})
 })(jQuery);

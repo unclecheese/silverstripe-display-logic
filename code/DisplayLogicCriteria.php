@@ -142,9 +142,9 @@ class DisplayLogicCriteria extends Object {
 
 	/**
 	 * Adds a new criterion
-	 * @param DisplayLogicCriterion $c
+	 * @param DisplayLogicCriterion|DisplayLogicCriteria $c
 	 */
-	public function addCriterion(DisplayLogicCriterion $c) {		
+	public function addCriterion($c) {		
 		$this->criteria[] = $c;
 	}
 
