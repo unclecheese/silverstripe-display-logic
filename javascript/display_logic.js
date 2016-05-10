@@ -271,7 +271,7 @@
 		}
 	});
 
-	$('div.display-logic.displaylogicwrapper.display-logic-display').entwine({
+	$('div.display-logic.displaylogicwrapper.display-logic-display, div.display-logic.displaylogicwrapper.display-logic-hide').entwine({
 		getFormField: function () {
 			return this;
 		},
