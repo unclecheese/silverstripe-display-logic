@@ -2,7 +2,7 @@
 	$('div.display-logic, div.display-logic-master').entwine({
 
 		escapeSelector: function(selector) {
-			return selector.replace(/(\[|])/g, '\\$1');
+			return selector.replace(/(\[)/g, '_').replace(/(\])/g, '')
 		},
 
 		findHolder: function(name) {
@@ -16,20 +16,27 @@
 			if (name) {
 				name = this.escapeSelector(name);
 			}
-			return this.find('[name='+name+']');
+
+			if(this.find('[name='+name+']').length) {
+				return this.find('[name='+name+']');
+			}
+
+			return this.find('#'+this.getFormID()+'_'+name);
 		},
 
 		getFieldName: function() {
 			var fieldID = this.attr('id');
-			
+
 			if(fieldID) {
 				return this.attr('id')
-						.replace(new RegExp('^'+this.getFormID()+'_'),'')
-						.replace(/_Holder$/,'');
+					.replace(new RegExp('^'+this.getFormID()+'_'),'')
+					.replace(/_Holder$/,'');
 			}
 		},
 
 		nameToHolder: function (name) {
+			name = this.escapeSelector(name);
+
 			// Hack!
 			// Remove this when OptionsetField_holder.ss uses $HolderID
 			// as its div ID instead of $ID
@@ -37,7 +44,7 @@
 				return name;
 			}
 
-			return this.getFormID()+'_'+name+'_Holder';			
+			return this.getFormID()+'_'+name+'_Holder';
 		},
 
 		getFormID: function () {
@@ -48,7 +55,7 @@
 			return this.getFormField().val();
 		},
 
-		evaluateEqualTo: function(val) {			
+		evaluateEqualTo: function(val) {
 			return this.getFieldValue() === val;
 		},
 
@@ -64,7 +71,7 @@
 
 		evaluateGreaterThan: function(val) {
 			var num = parseFloat(val);
-			
+
 			return parseFloat(this.getFieldValue()) > num;
 		},
 
@@ -96,7 +103,7 @@
 		evaluateBetween: function(minmax) {
 			v = parseFloat(this.getFieldValue());
 			parts = minmax.split("-");
-			if(parts.length === 2) {				
+			if(parts.length === 2) {
 				return v > parseFloat(parts[0]) && v < parseFloat(parts[1]);
 			}
 			return false;
@@ -107,7 +114,7 @@
 		},
 
 		onmatch: function () {
-			
+
 			var allReadonly = true;
 			var masters = [];
 			var field = this.getFormField();
@@ -119,10 +126,10 @@
 
 			masters = this.getMasters();
 
-			for(m in masters) {	
-				var holderName = this.nameToHolder(masters[m]);
-			
+			for(m in masters) {
+				var holderName = this.nameToHolder(this.escapeSelector(masters[m]));
 				var master = this.closest('form').find(this.escapeSelector('#'+holderName));
+
 				if(!master.is('.readonly')) allReadonly = false;
 
 				master.addClass("display-logic-master");
@@ -135,7 +142,7 @@
 			}
 
 			// If all the masters are readonly fields, the field has no way of displaying.
-			if(masters.length && allReadonly) {				
+			if(masters.length && allReadonly) {
 				this.show();
 			}
 		},
@@ -145,8 +152,8 @@
 		},
 
 		parseLogic: function() {
-			var js = this.getLogic();	
-			var result = new Function("return " + js).bind(this)();	
+			var js = this.getLogic();
+			var result = new Function("return " + js).bind(this)();
 
 			return result;
 		},
@@ -164,7 +171,7 @@
 	$('div.optionset').entwine({
 
 		getFormField: function() {
-			f = this._super().filter(":checked");			
+			f = this._super().filter(":checked");
 			return f;
 		}
 
@@ -175,19 +182,19 @@
 
 		evaluateHasCheckedOption: function(val) {
 			var found = false;
-			this.find(':checkbox').filter(':checked').each(function() {				
+			this.find(':checkbox').filter(':checked').each(function() {
 				found = (found || ($(this).val() === val || $(this).getLabel().text() === val));
 			})
 
 			return found;
 		},
 
-		evaluateHasCheckedAtLeast: function(num) {			
+		evaluateHasCheckedAtLeast: function(num) {
 			return this.find(':checked').length >= num;
 		},
 
 		evaluateHasCheckedLessThan: function(num) {
-			return this.find(':checked').length <= num;	
+			return this.find(':checked').length <= num;
 		}
 
 	});
@@ -202,7 +209,7 @@
 
 
 	$('div.display-logic.display-logic-display').entwine({
-		testLogic: function() {			
+		testLogic: function() {
 			this.toggle(this.parseLogic());
 		}
 	});
@@ -220,18 +227,18 @@
 			this.closest(".display-logic-master").notify();
 		},
 
-		onchange: function() {			
+		onchange: function() {
 			this.closest(".display-logic-master").notify();
 		}
 	});
-	
+
 
 	$('div.display-logic-master :checkbox, div.display-logic-master :radio').entwine({
-		onmatch: function() {			
+		onmatch: function() {
 			this.closest(".display-logic-master").notify();
 		},
 
-		onclick: function() {				
+		onclick: function() {
 			this.closest(".display-logic-master").notify();
 		}
 	});
@@ -240,13 +247,13 @@
 		getFieldValue: function () {
 			return this.find(':checked').val();
 		}
-	});	
+	});
 
 	$('div.display-logic-master').entwine({
 		Listeners: null,
 
-		notify: function() {	
-			$.each(this.getListeners(), function() {	
+		notify: function() {
+			$.each(this.getListeners(), function() {
 				$(this).testLogic();
 			});
 		},
@@ -259,7 +266,7 @@
 			var listeners = [];
 			this.closest("form").find('.display-logic').each(function() {
 				masters = $(this).getMasters();
-				for(m in  masters) {					
+				for(m in  masters) {
 					if(self.nameToHolder(masters[m]) == self.attr('id')) {
 						listeners.push($(this)[0]);
 						break;
