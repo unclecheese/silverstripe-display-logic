@@ -33,7 +33,7 @@
 			// Hack!
 			// Remove this when OptionsetField_holder.ss uses $HolderID
 			// as its div ID instead of $ID
-			if(this.closest('form').find('ul[name='+name+']').length) {
+			if(this.closest('form').find('ul.optionset li input[name='+name+']:first').length) {
 				return name;
 			}
 
