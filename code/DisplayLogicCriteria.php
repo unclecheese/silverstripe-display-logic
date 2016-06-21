@@ -222,7 +222,7 @@ class DisplayLogicCriteria extends Object {
 		$list = array ();
 		foreach($this->getCriteria() as $c) {
 			if($c instanceof DisplayLogicCriteria) {
-				$list += $c->getMasterList();
+				$list=array_merge($list, $c->getMasterList());
 			}
 			else {
 				$list[] = $c->getMaster();
