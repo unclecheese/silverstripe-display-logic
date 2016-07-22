@@ -106,6 +106,10 @@
 			return this.getFormField().is(":checked");
 		},
 
+		evaluateNotChecked: function() {
+			return !this.getFormField().is(":checked");
+		},
+
 		onmatch: function () {
 			
 			var allReadonly = true;

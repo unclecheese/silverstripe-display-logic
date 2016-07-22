@@ -33,6 +33,7 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
     - isNotEmpty
     - isBetween
     - isChecked
+    - isNotChecked()
     - hasCheckedOption
     - hasCheckedAtLeast
     - hasCheckedLessThan
