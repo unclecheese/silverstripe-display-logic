@@ -285,9 +285,9 @@
 		}
 	});
 
-	$('div.display-logic *').entwine({
+	$('div.field *').entwine({
 		getHolder: function() {
-			return this.closest('.display-logic');
+			return this.parents('.field');
 		}
 	});
 
