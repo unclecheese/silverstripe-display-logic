@@ -188,6 +188,7 @@ class DisplayLogicCriteria extends Object {
 	public function end() {
 		if($this->parent) {
 			$this->parent->addCriterion($this);
+			return $this->parent;
 		}
 		return $this->slave;
 	}
