@@ -125,7 +125,8 @@
 
 			if(field.data('display-logic-eval') && field.data('display-logic-masters')) {
 				this.data('display-logic-eval', field.data('display-logic-eval'))
-					.data('display-logic-masters', field.data('display-logic-masters'));
+					.data('display-logic-masters', field.data('display-logic-masters'))
+					.data('display-logic-animation', field.data('display-logic-animation'));
 			}
 
 			masters = this.getMasters();
@@ -250,7 +251,8 @@
 		},
 		
 		perform: function(el, result, method) {
-			if (result) {
+			if(typeof method == 'undefined') method = 'toggle';
+			if(result) {
 				this[method].show(el);
 			} else {
 				this[method].hide(el);

@@ -46,7 +46,7 @@ class DisplayLogicCriteria extends Object {
 	 * The animation method to use
 	 * @var string
 	 */
-	protected $animation = "toggle";
+	protected $animation = null;
 
 
 
@@ -56,6 +56,17 @@ class DisplayLogicCriteria extends Object {
 	 */
 	protected $logicalOperator = null;
 
+
+
+	/**
+	 * Changes the configured default animation method
+	 * @param string $animation
+	 */
+	public static function set_default_animation($animation) {
+		if(in_array($animation, Config::inst()->get(__CLASS__, 'animations'))) {
+			Config::inst()->update(__CLASS__, 'default_animation', $animation);
+		}
+	}
 
 
 
@@ -195,7 +206,7 @@ class DisplayLogicCriteria extends Object {
 	 * @return DisplayLogicCriteria
 	 */
 	public function useAnimation($animation) {
-		if (in_array($animation, $this->config()->animations)) {
+		if(in_array($animation, $this->config()->animations)) {
 			$this->animation = $animation;
 		}
 		return $this;
@@ -209,6 +220,9 @@ class DisplayLogicCriteria extends Object {
 	 * @return string
 	 */
 	public function getAnimation() {
+		if(!$this->animation) {
+			return $this->config()->default_animation;
+		}
 		return $this->animation;
 	}
 
