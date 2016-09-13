@@ -208,20 +208,68 @@
 		getLabel: function() {
 			return this.closest('form').find('label[for='+this.getHolder().escapeSelector(this.attr('id'))+']');
 		}
-	})
+	});
 
+
+	var animation = {
+		
+		toggle: {
+			
+			show: function(el) {
+				el.show();
+			},
+			
+			hide: function(el) {
+				el.hide();
+			}
+			
+		},
+		
+		slide: {
+			
+			show: function(el) {
+				el.slideDown();
+			},
+			
+			hide: function(el) {
+				el.slideUp();
+			}
+			
+		},
+		
+		fade: {
+			
+			show: function(el) {
+				el.fadeIn();
+			},
+			
+			hide: function(el) {
+				el.fadeOut();
+			}
+			
+		},
+		
+		perform: function(el, result, method) {
+			if (result) {
+				this[method].show(el);
+			} else {
+				this[method].hide(el);
+			}
+		}
+		
+	};
 
 
 	$('div.display-logic.display-logic-display').entwine({
 		testLogic: function() {
-			this.toggle(this.parseLogic());
+			animation.perform(this, this.parseLogic(), this.data('display-logic-animation'));
 		}
 	});
 
 
 	$('div.display-logic.display-logic-hide').entwine({
 		testLogic: function() {
-			this.toggle(!this.parseLogic());
+			animation.perform(this, !this.parseLogic(), this.data('display-logic-animation'));
 		}
 	});
 

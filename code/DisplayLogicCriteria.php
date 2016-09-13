@@ -43,6 +43,14 @@ class DisplayLogicCriteria extends Object {
 
 
 	/**
+	 * The animation method to use
+	 * @var string
+	 */
+	protected $animation = "toggle";
+
+
+
+	/**
 	 * Either "and" or "or", determines disjunctive or conjunctive logic for the whole criteria set
 	 * @var string
 	 */
@@ -176,6 +184,32 @@ class DisplayLogicCriteria extends Object {
 	 */
 	public function group() {
 		return DisplayLogicCriteria::create($this->slave, $this->master, $this);
+	}
+
+
+
+	/**
+	 *
+	 * Defines the animation method to use
+	 * @param string $animation
+	 * @return DisplayLogicCriteria
+	 */
+	public function useAnimation($animation) {
+		if (in_array($animation, $this->config()->animations)) {
+			$this->animation = $animation;
+		}
+		return $this;
+	}
+
+
+
+
+	/**
+	 * Answers the animation method to use
+	 * @return string
+	 */
+	public function getAnimation() {
+		return $this->animation;
 	}
 
 
