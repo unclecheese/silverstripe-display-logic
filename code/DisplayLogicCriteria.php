@@ -168,7 +168,27 @@ class DisplayLogicCriteria extends Object {
 		return $this->logicalOperator == "or" ? "||" : "&&";
 	}
 
+	/**
+	 * Accessor for the master field
+	 * @return string
+	 */
+	public function getMaster() {
+		return $this->master;
+	}
 
+	/**
+	 * @return $this
+	 */
+	public function setMaster($fieldName) {
+		$this->master = $fieldName;
+		$criteria = $this->getCriteria();
+		if ($criteria) {
+			foreach ($criteria as $criterion) {
+				$criterion->setMaster($fieldName);
+			}
+		}
+		return $this;
+	}
 
 	/**
 	 * Creates a nested {@link DisplayLogicCriteria}

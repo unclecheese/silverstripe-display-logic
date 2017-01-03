@@ -89,7 +89,9 @@ class DisplayLogicFormField extends DataExtension {
 		$this->displayLogicCriteria = $c;
 	}
 
-
+	public function getDisplayLogicCriteria() {
+		return $this->displayLogicCriteria;
+	}
 
 
 	/**
