@@ -15,6 +15,11 @@ DisplayLogicCriteria:
     - hasCheckedOption
     - hasCheckedAtLeast
     - hasCheckedLessThan
+  animations:
+    - toggle
+    - slide
+    - fade
+  default_animation: toggle
     
 FormField:
   extensions:

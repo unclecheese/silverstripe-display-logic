@@ -105,6 +105,18 @@ class DisplayLogicFormField extends DataExtension {
 
 
 	/**
+	 * Answers the animation method to use from the criteria object
+	 *
+	 * @return string
+	 */
+	public function DisplayLogicAnimation() {
+		if($this->displayLogicCriteria) {
+			return $this->displayLogicCriteria->getAnimation();
+		}
+	}
+
+
+	/**
 	 * Loads the dependencies and renders the JavaScript-readable logic to the form HTML
 	 *
 	 * @return  string
@@ -126,6 +138,7 @@ class DisplayLogicFormField extends DataExtension {
 		if($logic = $field->DisplayLogic()) {			
 			$field->setAttribute('data-display-logic-masters', $field->DisplayLogicMasters());
 			$field->setAttribute('data-display-logic-eval', $logic);
+			$field->setAttribute('data-display-logic-animation', $field->DisplayLogicAnimation());
 		}
 	}
 

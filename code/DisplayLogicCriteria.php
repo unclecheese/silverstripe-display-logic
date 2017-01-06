@@ -43,11 +43,30 @@ class DisplayLogicCriteria extends Object {
 
 
 	/**
+	 * The animation method to use
+	 * @var string
+	 */
+	protected $animation = null;
+
+
+
+	/**
 	 * Either "and" or "or", determines disjunctive or conjunctive logic for the whole criteria set
 	 * @var string
 	 */
 	protected $logicalOperator = null;
 
+
+
+	/**
+	 * Changes the configured default animation method
+	 * @param string $animation
+	 */
+	public static function set_default_animation($animation) {
+		if(in_array($animation, Config::inst()->get(__CLASS__, 'animations'))) {
+			Config::inst()->update(__CLASS__, 'default_animation', $animation);
+		}
+	}
 
 
 
@@ -176,6 +195,35 @@ class DisplayLogicCriteria extends Object {
 	 */
 	public function group() {
 		return DisplayLogicCriteria::create($this->slave, $this->master, $this);
+	}
+
+
+
+	/**
+	 *
+	 * Defines the animation method to use
+	 * @param string $animation
+	 * @return DisplayLogicCriteria
+	 */
+	public function useAnimation($animation) {
+		if(in_array($animation, $this->config()->animations)) {
+			$this->animation = $animation;
+		}
+		return $this;
+	}
+
+
+
+
+	/**
+	 * Answers the animation method to use
+	 * @return string
+	 */
+	public function getAnimation() {
+		if(!$this->animation) {
+			return $this->config()->default_animation;
+		}
+		return $this->animation;
 	}
 
 
