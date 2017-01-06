@@ -70,7 +70,13 @@ class DisplayLogicCriterion extends Object {
 		return $this->master;
 	}
 
-
+	/**
+	 * @return $this
+	 */
+	public function setMaster($fieldName) {
+		$this->master = $fieldName;
+		return $this;
+	}
 
 
 	/**
