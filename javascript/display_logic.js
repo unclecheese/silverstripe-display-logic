@@ -2,7 +2,7 @@
 	$('div.display-logic, div.display-logic-master').entwine({
 
 		escapeSelector: function(selector) {
-			return selector.replace(/(\[)/g, '_').replace(/(\])/g, '')
+			return selector.replace(/(\[)/g, '_').replace(/(\])/g, '');
 		},
 
 		findHolder: function(name) {
@@ -37,13 +37,15 @@
 		nameToHolder: function (name) {
 			name = this.escapeSelector(name);
 
+			// SS 3.2+, Convert::raw2htmlid() logic
+			name = name.replace(/[^a-zA-Z0-9\-_:.]+/g, '_').replace(/_+/g, '_');
+
 			// Hack!
 			// Remove this when OptionsetField_holder.ss uses $HolderID
 			// as its div ID instead of $ID
 			if(this.closest('form').find('ul.optionset li input[name='+name+']:first').length) {
 				return name;
 			}
-
 			return this.getFormID()+'_'+name+'_Holder';
 		},
 
@@ -131,7 +133,7 @@
 
 			masters = this.getMasters();
 
-			for(m in masters) {
+			for(var m in masters) {
 				var holderName = this.nameToHolder(this.escapeSelector(masters[m]));
 				var master = this.closest('form').find(this.escapeSelector('#'+holderName));
 
@@ -189,7 +191,7 @@
 			var found = false;
 			this.find(':checkbox').filter(':checked').each(function() {
 				found = (found || ($(this).val() === val || $(this).getLabel().text() === val));
-			})
+			});
 
 			return found;
 		},
@@ -210,7 +212,6 @@
 			return this.closest('form').find('label[for='+this.getHolder().escapeSelector(this.attr('id'))+']');
 		}
 	});
-
 
 	var animation = {
 		
@@ -313,14 +314,15 @@
 		},
 
 		getListeners: function() {
-			if(l = this._super()) {
+			l = this._super();
+			if(l) {
 				return l;
 			}
 			var self = this;
 			var listeners = [];
 			this.closest("form").find('.display-logic').each(function() {
 				masters = $(this).getMasters();
-				for(m in  masters) {
+				for(var m in masters) {
 					if(self.nameToHolder(masters[m]) == self.attr('id')) {
 						listeners.push($(this)[0]);
 						break;
@@ -338,7 +340,7 @@
 		},
 
 		getFieldName: function () {
-			return ''
+			return '';
 		}
 	});
 
