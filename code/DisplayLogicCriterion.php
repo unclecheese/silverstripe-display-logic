@@ -1,5 +1,9 @@
 <?php
 
+namespace UncleCheese\DisplayLogic;
+
+use SilverStripe\Core\Object;
+
 /**
  *  Defines a criterion that controls the display of a given
  *  {@link FormField} object
