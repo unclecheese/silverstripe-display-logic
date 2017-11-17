@@ -7,8 +7,21 @@
  * @package  display_logic
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DisplayLogicCriterion extends Object {
 
+namespace UncleCheese\DisplayLogic;
+
+use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Config\Configurable;
+
+class DisplayLogicCriterion
+{
+
+    use Extensible {
+        defineMethods as extensibleDefineMethods;
+    }
+    use Injectable;
+    use Configurable;
 
 	/**
 	 * The name of the form field that is controlling the display
@@ -16,16 +29,11 @@ class DisplayLogicCriterion extends Object {
 	 */
 	protected $master = null;
 
-
-
 	/**
 	 * The comparison function to use, e.g. "EqualTo"
 	 * @var string
 	 */
 	protected $operator = null;
-
-
-
 
 	/**
 	 * The value to compare to
@@ -33,16 +41,11 @@ class DisplayLogicCriterion extends Object {
 	 */
 	protected $value = null;
 
-
-
 	/**
 	 * The parent {@link DisplayLogicCriteria}
 	 * @var DisplayLogicCriteria
 	 */
 	protected $set = null;
-
-
-
 
 	/**
 	 * Constructor
@@ -51,7 +54,8 @@ class DisplayLogicCriterion extends Object {
 	 * @param string               $value    The value to compare to
 	 * @param DisplayLogicCriteria $set      The parent criteria set
 	 */
-	public function __construct($master, $operator, $value, DisplayLogicCriteria $set) {
+	public function __construct($master, $operator, $value, DisplayLogicCriteria $set)
+    {
 		parent::__construct();
 		$this->master = $master;
 		$this->operator = $operator;
@@ -59,31 +63,30 @@ class DisplayLogicCriterion extends Object {
 		$this->set = $set;
 	}
 
-
-
-
 	/**
 	 * Accessor for the master field
 	 * @return string
 	 */
-	public function getMaster() {
+	public function getMaster()
+    {
 		return $this->master;
 	}
 
 	/**
 	 * @return $this
 	 */
-	public function setMaster($fieldName) {
+	public function setMaster($fieldName)
+    {
 		$this->master = $fieldName;
 		return $this;
 	}
-
 
 	/**
 	 * Creates a JavaScript-readable representation of this criterion
 	 * @return string
 	 */
-	public function toScript() {		
+	public function toScript()
+    {
 		return sprintf(
 			"this.findHolder('%s').evaluate%s('%s')",
 			$this->master,

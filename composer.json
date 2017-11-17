@@ -4,7 +4,7 @@
         "silverstripe/display-logic": "*"
     },
     "description": "Allows assignment of conditions for display and hide of specific form fields based on client side behavior.",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendomodule",
     "keywords": ["silverstripe", "display", "logic", "forms", "cms"],
     "license": "BSD-3-Clause",
     "authors": [
@@ -15,12 +15,12 @@
     ],
     "require":
     {
-        "silverstripe/framework": "^3.1"
+        "silverstripe/framework": "^4.0"
     },
     "extra": {
-       "installer-name": "display_logic",
-       "branch-alias": {
-            "dev-master": "1.4.x-dev"
-        }
+        "installer-name": "display_logic",
+        "expose": [
+            "client"
+        ]
     }
 }
