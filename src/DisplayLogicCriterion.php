@@ -56,7 +56,6 @@ class DisplayLogicCriterion
 	 */
 	public function __construct($master, $operator, $value, DisplayLogicCriteria $set)
     {
-		parent::__construct();
 		$this->master = $master;
 		$this->operator = $operator;
 		$this->value = $value;
