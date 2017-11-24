@@ -119,40 +119,44 @@
 			return !this.getFormField().is(":checked");
 		},
 
-		onmatch: function () {
+        // allow field init to be called on demand if necessary
+        initFields: function() {
+            var allReadonly = true;
+            var masters = [];
+            var field = this.getFormField();
 
-			var allReadonly = true;
-			var masters = [];
-			var field = this.getFormField();
+            if(field.data('display-logic-eval') && field.data('display-logic-masters')) {
+                this.data('display-logic-eval', field.data('display-logic-eval'))
+                    .data('display-logic-masters', field.data('display-logic-masters'))
+                    .data('display-logic-animation', field.data('display-logic-animation'));
+            }
 
-			if(field.data('display-logic-eval') && field.data('display-logic-masters')) {
-				this.data('display-logic-eval', field.data('display-logic-eval'))
-					.data('display-logic-masters', field.data('display-logic-masters'))
-					.data('display-logic-animation', field.data('display-logic-animation'));
-			}
+            masters = this.getMasters();
 
-			masters = this.getMasters();
+            for(var m in masters) {
+                var holderName = this.nameToHolder(this.escapeSelector(masters[m]));
+                var master = this.closest('form').find(this.escapeSelector('#'+holderName));
 
-			for(var m in masters) {
-				var holderName = this.nameToHolder(this.escapeSelector(masters[m]));
-				var master = this.closest('form').find(this.escapeSelector('#'+holderName));
+                if(!master.is('.readonly')) allReadonly = false;
 
-				if(!master.is('.readonly')) allReadonly = false;
+                master.addClass("display-logic-master");
+                if(master.find('input[type=radio]').length) {
+                    master.addClass('optionset');
+                }
+                if(master.find("input[type=checkbox]").length > 1) {
+                    master.addClass('checkboxset');
+                }
+            }
 
-				master.addClass("display-logic-master");
-				if(master.find('input[type=radio]').length) {
-					master.addClass('optionset');
-				}
-				if(master.find("input[type=checkbox]").length > 1) {
-					master.addClass('checkboxset');
-				}
-			}
+            // If all the masters are readonly fields, the field has no way of displaying.
+            if(masters.length && allReadonly) {
+                this.show();
+            }
+        },
 
-			// If all the masters are readonly fields, the field has no way of displaying.
-			if(masters.length && allReadonly) {
-				this.show();
-			}
-		},
+        onmatch: function () {
+            this.initFields();
+        },
 
 		getLogic: function() {
 			return $.trim(this.data('display-logic-eval'));
@@ -214,43 +218,43 @@
 	});
 
 	var animation = {
-		
+
 		toggle: {
-			
+
 			show: function(el) {
 				el.show();
 			},
-			
+
 			hide: function(el) {
 				el.hide();
 			}
-			
+
 		},
-		
+
 		slide: {
-			
+
 			show: function(el) {
 				el.slideDown();
 			},
-			
+
 			hide: function(el) {
 				el.slideUp();
 			}
-			
+
 		},
-		
+
 		fade: {
-			
+
 			show: function(el) {
 				el.fadeIn();
 			},
-			
+
 			hide: function(el) {
 				el.fadeOut();
 			}
-			
+
 		},
-		
+
 		perform: function(el, result, method) {
 			if(typeof method == 'undefined') method = 'toggle';
 			if(result) {
@@ -259,7 +263,7 @@
 				this[method].hide(el);
 			}
 		}
-		
+
 	};
 
 

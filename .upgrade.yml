@@ -1,0 +1,5 @@
+mappings:
+  DisplayLogicCriteria: Unclecheese\DisplayLogic\Control\DisplayLogicCriteria
+  DisplayLogicCriterion: Unclecheese\DisplayLogic\Control\DisplayLogicCriterion
+  DisplayLogicFormField: Unclecheese\DisplayLogic\Extensions\DisplayLogicFormField
+  DisplayLogicWrapper: Unclecheese\DisplayLogic\Forms\DisplayLogicWrapper
