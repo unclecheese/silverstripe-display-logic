@@ -1,0 +1,6 @@
+# Ignore dist files
+client/dist/
+
+# Ignore vendor
+node_modules/
+

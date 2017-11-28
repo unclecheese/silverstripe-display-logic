@@ -9,11 +9,10 @@
 
 namespace UncleCheese\DisplayLogic;
 
-use SilverStripe\ORM\DataExtension;
-use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Extension;
 use SilverStripe\View\Requirements;
 
-class DisplayLogicFormField extends DataExtension
+class DisplayLogicFormField extends Extension
 {
 	/**
 	 * The {@link DisplayLogicCriteria} that is evaluated to determine whether this field should display
@@ -125,12 +124,8 @@ class DisplayLogicFormField extends DataExtension
 	public function DisplayLogic()
     {
 		if ($this->displayLogicCriteria) {
-			if(!Config::inst()->get('DisplayLogic', 'jquery_included')) {
-                Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.min.js');
-			}
-            Requirements::javascript('silverstripe/admin: thirdparty/jquery-entwine/dist/jquery.entwine-dist.js');
-			Requirements::javascript('unclecheese/display-logic: client/js/display_logic.js');
-			Requirements::css('unclecheese/display-logic: client/css/display_logic.css');
+			Requirements::javascript('unclecheese/display-logic: client/dist/js/bundle.js');
+			Requirements::css('unclecheese/display-logic: client/dist/styles/bundle.css');
 			return $this->displayLogicCriteria->toScript();
 		}
 		
