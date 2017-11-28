@@ -300,6 +300,9 @@ _jquery2.default.entwine('ss', function ($) {
     onmatch: function onmatch() {
       this.closest('.display-logic-master').notify();
     },
+    onkeyup: function onkeyup() {
+      this.closest('.display-logic-master').notify();
+    },
     onchange: function onchange() {
       this.closest('.display-logic-master').notify();
     }

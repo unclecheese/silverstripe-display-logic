@@ -283,6 +283,10 @@ $.entwine('ss', ($) => {
       this.closest('.display-logic-master').notify();
     },
 
+    onkeyup() {
+      this.closest('.display-logic-master').notify();
+    },
+
     onchange() {
       this.closest('.display-logic-master').notify();
     }
