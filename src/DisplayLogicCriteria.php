@@ -15,6 +15,7 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FormField;
+use BadMethodCallException;
 
 
 class DisplayLogicCriteria
@@ -106,7 +107,7 @@ class DisplayLogicCriteria
 
 	/**
 	 * Wildcard method for applying all the possible conditions
-	 * @param  sting $method The method name
+	 * @param  string $method The method name
 	 * @param  array $args The arguments
 	 * @return  DisplayLogicCriteria
 	 */
@@ -122,8 +123,14 @@ class DisplayLogicCriteria
 
 			$this->addCriterion(DisplayLogicCriterion::create($this->master, $operator, $val, $this));
 			return $this;
-		}		
-		return parent::__call($method, $args);
+		}
+		if(method_exists($this, $method)){
+			return $this->$method(...$args);
+		}
+		$class = get_class($this);
+		throw new BadMethodCallException(
+			"Object->__call(): extra method $method is invalid on $class:"
+		);
 	}
 
 
@@ -285,7 +292,7 @@ class DisplayLogicCriteria
     {
 		if ($this->parent) {
 			$this->parent->addCriterion($this);
-			return $this->parent;
+			return $this->parent->end();
 		}
 		return $this->slave;
 	}

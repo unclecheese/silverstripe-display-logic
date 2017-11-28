@@ -14,11 +14,6 @@ use SilverStripe\View\Requirements;
 
 class DisplayLogicFormField extends Extension
 {
-	/**
-	 * The {@link DisplayLogicCriteria} that is evaluated to determine whether this field should display
-	 * @var DisplayLogicCriteria
-	 */
-	protected $displayLogicCriteria = null;
 
 	/**
 	 * If the criteria evaluate true, the field should display
@@ -34,7 +29,7 @@ class DisplayLogicFormField extends Extension
 			$this->owner->addHolderClass($class);
 		}
 
-		return $this->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
+		return $this->owner->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
 	}
 
 	/**
@@ -52,7 +47,7 @@ class DisplayLogicFormField extends Extension
 			$this->owner->addHolderClass($class);
 		}
 
-		return $this->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
+		return $this->owner->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
 	}
 
 	/**
@@ -84,12 +79,12 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function setDisplayLogicCriteria(DisplayLogicCriteria $c)
     {
-		$this->displayLogicCriteria = $c;
+		$this->owner->displayLogicCriteria = $c;
 	}
 
 	public function getDisplayLogicCriteria()
     {
-		return $this->displayLogicCriteria;
+		return !empty($this->owner->displayLogicCriteria) ? $this->owner->displayLogicCriteria : null;
 	}
 
 	/**
@@ -99,8 +94,8 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function DisplayLogicMasters()
     {
-		if ($this->displayLogicCriteria) {
-			return implode(",", array_unique($this->displayLogicCriteria->getMasterList()));
+		if ($this->owner->displayLogicCriteria) {
+			return implode(",", array_unique($this->owner->displayLogicCriteria->getMasterList()));
 		}
 	}
 
@@ -111,8 +106,8 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function DisplayLogicAnimation()
     {
-		if ($this->displayLogicCriteria) {
-			return $this->displayLogicCriteria->getAnimation();
+		if ($this->owner->displayLogicCriteria) {
+			return $this->owner->displayLogicCriteria->getAnimation();
 		}
 	}
 
@@ -123,10 +118,10 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function DisplayLogic()
     {
-		if ($this->displayLogicCriteria) {
+		if ($this->owner->displayLogicCriteria) {
 			Requirements::javascript('unclecheese/display-logic: client/dist/js/bundle.js');
 			Requirements::css('unclecheese/display-logic: client/dist/styles/bundle.css');
-			return $this->displayLogicCriteria->toScript();
+			return $this->owner->displayLogicCriteria->toScript();
 		}
 		
 		return false;
