@@ -15,6 +15,16 @@ use SilverStripe\View\Requirements;
 class DisplayLogicFormField extends Extension
 {
 
+	protected $displayLogicCriteria = [];
+
+
+	public function setDisplayLogicCriteria(DisplayLogicCriteria $criteria)
+	{
+		$id = $this->owner->getName();
+		$this->displayLogicCriteria[$id] = $criteria;
+		return $criteria;
+	}
+
 	/**
 	 * If the criteria evaluate true, the field should display
 	 * @param  string $master The name of the master field
@@ -29,7 +39,8 @@ class DisplayLogicFormField extends Extension
 			$this->owner->addHolderClass($class);
 		}
 
-		return $this->owner->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
+		return $this->setDisplayLogicCriteria(DisplayLogicCriteria::create($this->owner, $master));
+
 	}
 
 	/**
@@ -46,8 +57,7 @@ class DisplayLogicFormField extends Extension
 		if($this->owner->hasMethod('addHolderClass')) {
 			$this->owner->addHolderClass($class);
 		}
-
-		return $this->owner->displayLogicCriteria = DisplayLogicCriteria::create($this->owner, $master);
+		return $this->setDisplayLogicCriteria(DisplayLogicCriteria::create($this->owner, $master));
 	}
 
 	/**
@@ -58,7 +68,7 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function displayUnless($master)
     {
-		return $this->hideIf($master);
+		return $this->owner->hideIf($master);
 
 	}
 
@@ -73,18 +83,11 @@ class DisplayLogicFormField extends Extension
 		return $this->owner->displayIf($master);
 	}
 
-	/**
-	 * Sets the criteria governing the display of this field
-	 * @param DisplayLogicCriteria $c
-	 */
-	public function setDisplayLogicCriteria(DisplayLogicCriteria $c)
-    {
-		$this->owner->displayLogicCriteria = $c;
-	}
 
 	public function getDisplayLogicCriteria()
     {
-		return !empty($this->owner->displayLogicCriteria) ? $this->owner->displayLogicCriteria : null;
+		$id = $this->owner->getName();
+		return isset($this->displayLogicCriteria[$id]) ? $this->displayLogicCriteria[$id] : null;
 	}
 
 	/**
@@ -94,8 +97,8 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function DisplayLogicMasters()
     {
-		if ($this->owner->displayLogicCriteria) {
-			return implode(",", array_unique($this->owner->displayLogicCriteria->getMasterList()));
+		if ($criteria = $this->getDisplayLogicCriteria()) {
+			return implode(",", array_unique($criteria->getMasterList()));
 		}
 	}
 
@@ -106,8 +109,8 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function DisplayLogicAnimation()
     {
-		if ($this->owner->displayLogicCriteria) {
-			return $this->owner->displayLogicCriteria->getAnimation();
+		if ($criteria = $this->getDisplayLogicCriteria()) {
+			return $criteria->getAnimation();
 		}
 	}
 
@@ -118,10 +121,10 @@ class DisplayLogicFormField extends Extension
 	 */
 	public function DisplayLogic()
     {
-		if ($this->owner->displayLogicCriteria) {
+		if ($criteria = $this->getDisplayLogicCriteria()) {
 			Requirements::javascript('unclecheese/display-logic: client/dist/js/bundle.js');
 			Requirements::css('unclecheese/display-logic: client/dist/styles/bundle.css');
-			return $this->owner->displayLogicCriteria->toScript();
+			return $criteria->toScript();
 		}
 		
 		return false;
