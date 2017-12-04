@@ -187,7 +187,6 @@ $.entwine('ss', ($) => {
       for (const m in masters) {
         const holderName = this.nameToHolder(this.escapeSelector(masters[m]));
         const master = this.closest('form').find(this.escapeSelector(`#${holderName}`));
-
         if (!master.is('.readonly')) allReadonly = false;
 
         master.addClass('display-logic-master');
@@ -218,7 +217,6 @@ $.entwine('ss', ($) => {
 
     getMasters() {
       const masters = this.getFormField().data('display-logic-masters');
-
       return (masters) ? masters.split(',') : [];
     }
 
@@ -293,7 +291,7 @@ $.entwine('ss', ($) => {
   });
 
 
-  $('.cms .field.dropdown.display-logic-master select').entwine({
+  $('div.display-logic-master select').entwine({
     onmatch() {
       this.closest('.display-logic-master').notify();
     },

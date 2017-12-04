@@ -223,7 +223,6 @@ _jquery2.default.entwine('ss', function ($) {
       for (var m in masters) {
         var holderName = this.nameToHolder(this.escapeSelector(masters[m]));
         var master = this.closest('form').find(this.escapeSelector('#' + holderName));
-
         if (!master.is('.readonly')) allReadonly = false;
 
         master.addClass('display-logic-master');
@@ -249,7 +248,6 @@ _jquery2.default.entwine('ss', function ($) {
     },
     getMasters: function getMasters() {
       var masters = this.getFormField().data('display-logic-masters');
-
       return masters ? masters.split(',') : [];
     }
   });
@@ -308,7 +306,7 @@ _jquery2.default.entwine('ss', function ($) {
     }
   });
 
-  $('.cms .field.dropdown.display-logic-master select').entwine({
+  $('div.display-logic-master select').entwine({
     onmatch: function onmatch() {
       this.closest('.display-logic-master').notify();
     },
