@@ -7,10 +7,12 @@
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  */
 
-namespace UncleCheese\DisplayLogic;
+namespace UncleCheese\DisplayLogic\Extensions;
 
 use SilverStripe\Core\Extension;
 use SilverStripe\View\Requirements;
+use UncleCheese\DisplayLogic\DisplayLogicCriteria;
+
 
 class DisplayLogicFormField extends Extension
 {

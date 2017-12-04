@@ -23,6 +23,4 @@ UncleCheese\DisplayLogic\DisplayLogicCriteria:
     
 SilverStripe\Forms\FormField:
   extensions:
-    - UncleCheese\DisplayLogic\DisplayLogicFormField
-UncleCheese\DisplayLogic\DisplayLogic:
-  jquery_included: true
+    - UncleCheese\DisplayLogic\Extensions\DisplayLogicFormField

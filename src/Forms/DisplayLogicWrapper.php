@@ -1,6 +1,6 @@
 <?php
 
-namespace UncleCheese\DisplayLogic;
+namespace UncleCheese\DisplayLogic\Forms;
 
 use SilverStripe\Forms\CompositeField;
 
