@@ -8,41 +8,29 @@ window.ss = window.ss || {};
 
 $.entwine('ss', ($) => {
   const animation = {
-
     toggle: {
-
       show(el) {
         el.show();
       },
-
       hide(el) {
         el.hide();
       }
-
     },
-
     slide: {
-
       show(el) {
         el.slideDown();
       },
-
       hide(el) {
         el.slideUp();
       }
-
     },
-
     fade: {
-
       show(el) {
         el.fadeIn();
       },
-
       hide(el) {
         el.fadeOut();
       }
-
     },
 
     perform(el, result, method) {
@@ -53,7 +41,6 @@ $.entwine('ss', ($) => {
         this[method].hide(el);
       }
     }
-
   };
 
 
@@ -90,14 +77,14 @@ $.entwine('ss', ($) => {
           .replace(new RegExp(`^${this.getFormID()}_`), '')
           .replace(/_Holder$/, '');
       }
-	  return null;
+      return null;
     },
 
     nameToHolder(name) {
       let holderName = this.escapeSelector(name);
 
       // SS 3.2+, Convert::raw2htmlid() logic
-		holderName = holderName.replace(/[^a-zA-Z0-9\-_:.]+/g, '_').replace(/_+/g, '_');
+      holderName = holderName.replace(/[^a-zA-Z0-9\-_:.]+/g, '_').replace(/_+/g, '_');
 
       // Hack!
       // Remove this when OptionsetField_holder.ss uses $HolderID
@@ -210,10 +197,8 @@ $.entwine('ss', ($) => {
 
     parseLogic() {
       const js = this.getLogic();
-      const result = new Function(`return ${js}`).bind(this)();
-      return result;
+      return new Function(`return ${js}`).bind(this)();
     },
-
 
     getMasters() {
       const masters = this.getFormField().data('display-logic-masters');
@@ -225,8 +210,7 @@ $.entwine('ss', ($) => {
   $('div.optionset').entwine({
 
     getFormField() {
-      const f = this._super().filter(':checked');
-      return f;
+      return this._super().filter(':checked');
     }
 
   });
@@ -295,6 +279,7 @@ $.entwine('ss', ($) => {
     onmatch() {
       this.closest('.display-logic-master').notify();
     },
+
     onchange() {
       this.closest('.display-logic-master').notify();
     }
@@ -335,6 +320,7 @@ $.entwine('ss', ($) => {
       this.closest('form').find('.display-logic').each(function () {
         const masters = $(this).getMasters();
         for (const m in masters) {
+          if (!masters.hasOwnProperty(m)) continue;
           if (self.nameToHolder(masters[m]) === self.attr('id')) {
             listeners.push($(this)[0]);
             break;
@@ -342,6 +328,7 @@ $.entwine('ss', ($) => {
         }
       });
       this.setListeners(listeners);
+
       return this.getListeners();
     }
   });

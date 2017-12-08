@@ -1,4 +1,4 @@
-UncleCheese\DisplayLogic\DisplayLogicCriteria:
+UncleCheese\DisplayLogic\Criteria:
   comparisons:
     - isEqualTo
     - isNotEqualTo
@@ -23,4 +23,4 @@ UncleCheese\DisplayLogic\DisplayLogicCriteria:
     
 SilverStripe\Forms\FormField:
   extensions:
-    - UncleCheese\DisplayLogic\Extensions\DisplayLogicFormField
+    - UncleCheese\DisplayLogic\Extensions\DisplayLogic

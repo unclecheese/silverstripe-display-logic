@@ -18,9 +18,16 @@
         "silverstripe/framework": "^4.0"
     },
     "extra": {
-        "installer-name": "display_logic",
+        "installer-name": "display-logic",
         "expose": [
             "client"
         ]
+    },
+    "autoload": {
+        "psr-4": {
+            "UncleCheese\\DisplayLogic\\": "src/",
+            "UncleCheese\\DisplayLogic\\Tests\\": "tests/php/",
+            "UncleCheese\\DisplayLogic\\Tests\\Behaviour\\": "tests/behat/src/"
+        }
     }
 }
