@@ -85,7 +85,6 @@ window.ss = window.ss || {};
 
 _jquery2.default.entwine('ss', function ($) {
   var animation = {
-
     toggle: {
       show: function show(el) {
         el.show();
@@ -94,7 +93,6 @@ _jquery2.default.entwine('ss', function ($) {
         el.hide();
       }
     },
-
     slide: {
       show: function show(el) {
         el.slideDown();
@@ -103,7 +101,6 @@ _jquery2.default.entwine('ss', function ($) {
         el.slideUp();
       }
     },
-
     fade: {
       show: function show(el) {
         el.fadeIn();
@@ -243,8 +240,7 @@ _jquery2.default.entwine('ss', function ($) {
     },
     parseLogic: function parseLogic() {
       var js = this.getLogic();
-      var result = new Function('return ' + js).bind(this)();
-      return result;
+      return new Function('return ' + js).bind(this)();
     },
     getMasters: function getMasters() {
       var masters = this.getFormField().data('display-logic-masters');
@@ -254,8 +250,7 @@ _jquery2.default.entwine('ss', function ($) {
 
   $('div.optionset').entwine({
     getFormField: function getFormField() {
-      var f = this._super().filter(':checked');
-      return f;
+      return this._super().filter(':checked');
     }
   });
 
@@ -348,6 +343,7 @@ _jquery2.default.entwine('ss', function ($) {
       this.closest('form').find('.display-logic').each(function () {
         var masters = $(this).getMasters();
         for (var m in masters) {
+          if (!masters.hasOwnProperty(m)) continue;
           if (self.nameToHolder(masters[m]) === self.attr('id')) {
             listeners.push($(this)[0]);
             break;
@@ -355,11 +351,12 @@ _jquery2.default.entwine('ss', function ($) {
         }
       });
       this.setListeners(listeners);
+
       return this.getListeners();
     }
   });
 
-  $('div.display-logic.displaylogicwrapper.display-logic-display, div.display-logic.displaylogicwrapper.display-logic-hide').entwine({
+  $('div.display-logic.wrapper.display-logic-display, div.display-logic.wrapper.display-logic-hide').entwine({
     getFormField: function getFormField() {
       return this;
     },

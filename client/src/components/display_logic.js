@@ -333,7 +333,7 @@ $.entwine('ss', ($) => {
     }
   });
 
-  $('div.display-logic.displaylogicwrapper.display-logic-display, div.display-logic.displaylogicwrapper.display-logic-hide').entwine({
+  $('div.display-logic.wrapper.display-logic-display, div.display-logic.wrapper.display-logic-hide').entwine({
     getFormField() {
       return this;
     },
