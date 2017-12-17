@@ -1,4 +1,4 @@
-DisplayLogicCriteria:
+UncleCheese\DisplayLogic\Criteria:
   comparisons:
     - isEqualTo
     - isNotEqualTo
@@ -21,8 +21,6 @@ DisplayLogicCriteria:
     - fade
   default_animation: toggle
     
-FormField:
+SilverStripe\Forms\FormField:
   extensions:
-    - DisplayLogicFormField
-DisplayLogic:
-  jquery_included: true
+    - UncleCheese\DisplayLogic\Extensions\DisplayLogic
