@@ -89,9 +89,9 @@ $.entwine('ss', ($) => {
       // Hack!
       // Remove this when OptionsetField_holder.ss uses $HolderID
       // as its div ID instead of $ID
-      if (this.closest('form').find(`ul.optionset li input[name=${holderName}]:first`).length) {
-        return holderName;
-      }
+      // if (this.closest('form').find(`ul.optionset li input[name=${holderName}]:first`).length) {
+      //   return holderName;
+      // }
       return `${this.getFormID()}_${holderName}_Holder`;
     },
 
@@ -203,18 +203,13 @@ $.entwine('ss', ($) => {
     getMasters() {
       const masters = this.getFormField().data('display-logic-masters');
       return (masters) ? masters.split(',') : [];
+    },
+
+    getAnimationTargets() {
+      return [this.findHolder(this.getFieldName())];
     }
 
   });
-
-  $('div.optionset').entwine({
-
-    getFormField() {
-      return this._super().filter(':checked');
-    }
-
-  });
-
 
   $('div.checkboxset').entwine({
 
@@ -246,14 +241,18 @@ $.entwine('ss', ($) => {
 
   $('div.display-logic.display-logic-display').entwine({
     testLogic() {
-      animation.perform(this, this.parseLogic(), this.data('display-logic-animation'));
+      this.getAnimationTargets().forEach(t => {
+        animation.perform(t, this.parseLogic(), this.data('display-logic-animation'));
+      });
     }
   });
 
 
   $('div.display-logic.display-logic-hide').entwine({
     testLogic() {
-      animation.perform(this, !this.parseLogic(), this.data('display-logic-animation'));
+      this.getAnimationTargets().forEach(t => {
+        animation.perform(t, !this.parseLogic(), this.data('display-logic-animation'));
+      });
     }
   });
 
@@ -298,7 +297,11 @@ $.entwine('ss', ($) => {
   $('div.display-logic.optionset, div.display-logic-master.optionset').entwine({
     getFieldValue() {
       return this.find(':checked').val();
+    },
+    getAnimationTargets() {
+      return this._super().concat(this.findHolder(this.getFieldName()).find('.optionset'));
     }
+
   });
 
   $('div.display-logic-master').entwine({
@@ -333,13 +336,19 @@ $.entwine('ss', ($) => {
     }
   });
 
-  $('div.display-logic.displaylogicwrapper.display-logic-display, div.display-logic.displaylogicwrapper.display-logic-hide').entwine({
+  $(`div.display-logic.displaylogicwrapper.display-logic-display,
+     div.display-logic.displaylogicwrapper.display-logic-hide`
+  ).entwine({
     getFormField() {
       return this;
     },
 
     getFieldName() {
       return '';
+    },
+
+    getAnimationTargets() {
+      return [this];
     }
   });
 

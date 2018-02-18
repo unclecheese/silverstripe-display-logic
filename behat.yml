@@ -3,13 +3,14 @@
 # ========================================================================= #
 # vendor/bin/selenium-server-standalone -Dwebdriver.firefox.bin="/Applications/Firefox31.app/Contents/MacOS/firefox-bin"
 # vendor/bin/serve --bootstrap-file vendor/silverstripe/cms/tests/behat/serve-bootstrap.php
-# vendor/bin/behat @asset-admin
+# vendor/bin/behat @display-logic
 # ========================================================================= #
 default:
   suites:
-    silverstripe-display-logic:
+    display-logic:
       paths:
-        - %paths.modules.silverstripe-display-logic%/tests/behat/features
+        - %paths.modules.display-logic%/tests/behat/features
+        - %paths.modules.display-logic%/tests/behat/bootstrap/remove-test-page.feature
       contexts:
         - UncleCheese\DisplayLogic\Tests\Behaviour\FeatureContext
         - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
@@ -19,10 +20,10 @@ default:
         - SilverStripe\BehatExtension\Context\LoginContext
         -
           SilverStripe\Framework\Tests\Behaviour\ConfigContext:
-            - %paths.modules.silverstripe-display-logic%/tests/behat/files/
+            - %paths.modules.display-logic%/tests/behat/files/
         -
           UncleCheese\DisplayLogic\Tests\Behaviour\FixtureContext:
-            - %paths.modules.silverstripe-display-logic%/tests/behat/files/
+            - %paths.modules.display-logic%/tests/behat/bootstrap/
 
   extensions:
     SilverStripe\BehatExtension\Extension:
