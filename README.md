@@ -91,6 +91,9 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
 ## Kitchen sink example, with chaining
 ```php
 <?php
+
+use UncleCheese\DisplayLogic\Wrapper;
+//...
   public function getCMSFields() {
         $f = parent::getCMSFields();
         $f->addFieldsToTab("Root.Test", array(
@@ -116,7 +119,7 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
             TextField::create("ExternalLink", "Link to external page")
                 ->displayIf("LinkType")->isEqualTo("external")
                 ->end(),
-            DisplayLogicWrapper::create(
+            Wrapper::create(
             	ReadonlyField::create('URL','Base URL','http://example.com')
             )->displayIf('LinkType')->isEqualTo('internal')->end(),
             TextField::create("LinkLabel", "Label for link")
@@ -138,9 +141,9 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
 ```
 
 ## Dealing with non-standard form fields
-Sometimes you will want to wrap display logic around a form field that does not use the standard FormField template, such as GridField or LiteralField. For these cases, you can wrap the form field in DisplayLogicWrapper().
+Sometimes you will want to wrap display logic around a form field that does not use the standard FormField template, such as GridField or LiteralField. For these cases, you can wrap the form field in UncleCheese\DisplayLogic\Wrapper.
 ```php
-$fields->addFieldToTab("Root.Main", DisplayLogicWrapper::create(
+$fields->addFieldToTab("Root.Main", Wrapper::create(
 		LiteralField::create("foo","<h2>Hello</h2>")
 	)
 	->displayIf("Title")->isEmpty()->end()

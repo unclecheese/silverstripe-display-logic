@@ -1,0 +1,70 @@
+{
+  "name": "display-logic",
+  "version": "4.0.0",
+  "description": "Display logic module for interface",
+  "directories": {
+  },
+  "bin": {
+    "webpack": "./node_modules/webpack/webpack.js"
+  },
+  "engines": {
+    "node": "^6.x"
+  },
+  "scripts": {
+    "build": "yarn && NODE_ENV=production webpack -p --bail --progress",
+    "dev": "NODE_ENV=development webpack --progress",
+    "watch": "NODE_ENV=development webpack --watch --progress",
+    "css": "WEBPACK_CHILD=css npm run build",
+    "lint": "eslint client/src && sass-lint -v",
+    "js-fix": "eslint client/src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/unclecheese/silverstripe-display-logic.git"
+  },
+  "keywords": [
+    "silverstripe",
+    "module"
+  ],
+  "author": "Uncle Cheese",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/unclecheese/silverstripe-display-logic/issues"
+  },
+  "homepage": "https://github.com/unclecheese/silverstripe-display-logic",
+  "dependencies": {
+    "apollo-client": "^0.5.5",
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "4.0.0-beta",
+    "chosen-js": "^1.5.1",
+    "classnames": "^2.2.5",
+    "deep-equal": "^1.0.1",
+    "deep-freeze-strict": "^1.1.1",
+    "detect-browser": "^1.12.0",
+    "es6-promise": "^3.1.2",
+    "merge": "^1.2.0",
+    "modernizr": "^3.5.0",
+    "moment": "^2.18.1",
+    "page.js": "^4.13.3",
+    "qs": "^6.1.0",
+    "tether": "^1.3.2",
+    "toposort": "^1.0.3",
+    "url": "^0.11.0",
+    "validator": "^6.1.0"
+  },
+  "devDependencies": {
+    "@silverstripe/webpack-config": "^0.4.0"
+  },
+  "resolutions": {
+    "eslint": "^4.6.1"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+# Run display-logic behat tests with this command (installed with silverstripe/installer)
+# Note that display-logic behat tests require CMS module
+# ========================================================================= #
+# vendor/bin/selenium-server-standalone -Dwebdriver.firefox.bin="/Applications/Firefox31.app/Contents/MacOS/firefox-bin"
+# vendor/bin/serve --bootstrap-file vendor/silverstripe/cms/tests/behat/serve-bootstrap.php
+# vendor/bin/behat @display-logic
+# ========================================================================= #
+default:
+  suites:
+    display-logic:
+      paths:
+        - %paths.modules.display-logic%/tests/behat/features
+        - %paths.modules.display-logic%/tests/behat/bootstrap/remove-test-page.feature
+      contexts:
+        - UncleCheese\DisplayLogic\Tests\Behaviour\FeatureContext
+        - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
+        - SilverStripe\Framework\Tests\Behaviour\CmsUiContext
+        - SilverStripe\BehatExtension\Context\BasicContext
+        - SilverStripe\BehatExtension\Context\EmailContext
+        - SilverStripe\BehatExtension\Context\LoginContext
+        -
+          SilverStripe\Framework\Tests\Behaviour\ConfigContext:
+            - %paths.modules.display-logic%/tests/behat/files/
+        -
+          UncleCheese\DisplayLogic\Tests\Behaviour\FixtureContext:
+            - %paths.modules.display-logic%/tests/behat/bootstrap/
+
+  extensions:
+    SilverStripe\BehatExtension\Extension:
+      bootstrap_file: vendor/silverstripe/cms/tests/behat/serve-bootstrap.php
+      screenshot_path: %paths.base%/artifacts/screenshots
+      retry_seconds: 4 # default is 2
+    SilverStripe\BehatExtension\MinkExtension:
+      default_session: selenium2
+      javascript_session: selenium2
+      selenium2:
+        browser: firefox
