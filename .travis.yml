@@ -19,6 +19,8 @@ env:
     - TRAVIS_NODE_VERSION="6"
     - SS_BASE_URL="http://localhost:8080/"
     - SS_ENVIRONMENT_TYPE="dev"
+    - SS_DATABASE_USERNAME='root'
+    - SS_DATABASE_PASSWORD=''
 matrix:
   include:
     - php: 5.6
@@ -38,7 +40,7 @@ before_script:
 # Install composer
   - composer validate
   - composer install --prefer-dist
-  - composer require silverstripe/recipe-cms 1.1.x-dev  --no-update --prefer-dist
+  - composer require silverstripe/recipe-cms  --no-update --prefer-dist
   - composer update
 
 # Start behat services

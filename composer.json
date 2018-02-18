@@ -17,6 +17,12 @@
     {
         "silverstripe/framework": "^4.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "silverstripe/behat-extension": "^3@dev",
+        "silverstripe/serve": "^2",
+        "se/selenium-server-standalone": "2.41.0"
+    },
     "extra": {
         "installer-name": "display-logic",
         "expose": [
