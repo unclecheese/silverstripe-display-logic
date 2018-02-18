@@ -39,7 +39,6 @@ before_script:
   - composer validate
   - composer install --prefer-dist
   - composer require silverstripe/recipe-cms 1.1.x-dev  --no-update --prefer-dist
-  - composer require unclecheese/display-logic dev-master --no-update --prefer-dist
   - composer update
 
 # Start behat services
