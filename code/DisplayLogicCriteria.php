@@ -7,7 +7,7 @@
  * @package  display_logic
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DisplayLogicCriteria extends Object {
+class DisplayLogicCriteria extends SS_Object {
 
 
 	/**
