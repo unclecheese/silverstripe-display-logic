@@ -7,7 +7,7 @@
  * @package  display_logic
  * @author  Uncle Cheese <unclecheese@leftandmain.com>
  */
-class DisplayLogicCriterion extends Object {
+class DisplayLogicCriterion extends SS_Object {
 
 
 	/**
@@ -83,7 +83,7 @@ class DisplayLogicCriterion extends Object {
 	 * Creates a JavaScript-readable representation of this criterion
 	 * @return string
 	 */
-	public function toScript() {		
+	public function toScript() {
 		return sprintf(
 			"this.findHolder('%s').evaluate%s('%s')",
 			$this->master,
