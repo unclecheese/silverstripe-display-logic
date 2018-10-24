@@ -89,7 +89,9 @@ class DisplayLogicFormField extends DataExtension {
 		$this->displayLogicCriteria = $c;
 	}
 
-
+	public function getDisplayLogicCriteria() {
+		return $this->displayLogicCriteria;
+	}
 
 
 	/**
@@ -100,6 +102,18 @@ class DisplayLogicFormField extends DataExtension {
 	public function DisplayLogicMasters() {
 		if($this->displayLogicCriteria) {
 			return implode(",",array_unique($this->displayLogicCriteria->getMasterList()));			
+		}
+	}
+
+
+	/**
+	 * Answers the animation method to use from the criteria object
+	 *
+	 * @return string
+	 */
+	public function DisplayLogicAnimation() {
+		if($this->displayLogicCriteria) {
+			return $this->displayLogicCriteria->getAnimation();
 		}
 	}
 
@@ -126,6 +140,7 @@ class DisplayLogicFormField extends DataExtension {
 		if($logic = $field->DisplayLogic()) {			
 			$field->setAttribute('data-display-logic-masters', $field->DisplayLogicMasters());
 			$field->setAttribute('data-display-logic-eval', $logic);
+			$field->setAttribute('data-display-logic-animation', $field->DisplayLogicAnimation());
 		}
 	}
 

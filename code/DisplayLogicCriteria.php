@@ -43,11 +43,30 @@ class DisplayLogicCriteria extends SS_Object {
 
 
 	/**
+	 * The animation method to use
+	 * @var string
+	 */
+	protected $animation = null;
+
+
+
+	/**
 	 * Either "and" or "or", determines disjunctive or conjunctive logic for the whole criteria set
 	 * @var string
 	 */
 	protected $logicalOperator = null;
 
+
+
+	/**
+	 * Changes the configured default animation method
+	 * @param string $animation
+	 */
+	public static function set_default_animation($animation) {
+		if(in_array($animation, Config::inst()->get(__CLASS__, 'animations'))) {
+			Config::inst()->update(__CLASS__, 'default_animation', $animation);
+		}
+	}
 
 
 
@@ -74,9 +93,9 @@ class DisplayLogicCriteria extends SS_Object {
 	 * @param  array $args The arguments
 	 * @return  DisplayLogicCriteria
 	 */
-	public function __call($method, $args) {		
-		if(in_array($method, $this->config()->comparisons)) {		
-			$val = isset($args[0]) ? $args[0] : null;				
+	public function __call($method, $args) {
+		if(in_array($method, $this->config()->comparisons)) {
+			$val = isset($args[0]) ? $args[0] : null;
 			if(substr($method, 0, 2) == "is") {
 				$operator = substr($method, 2);
 			}
@@ -86,7 +105,7 @@ class DisplayLogicCriteria extends SS_Object {
 
 			$this->addCriterion(DisplayLogicCriterion::create($this->master, $operator, $val, $this));
 			return $this;
-		}		
+		}
 		return parent::__call($method, $args);
 	}
 
@@ -99,7 +118,7 @@ class DisplayLogicCriteria extends SS_Object {
 	 * @param  int  $max The maxiumum value
 	 * @return DisplayLogicCriteria
 	 */
-	public function isBetween($min, $max) {		
+	public function isBetween($min, $max) {
 		$this->addCriterion(DisplayLogicCriterion::create($this->master, "Between", "{$min}-{$max}", $this));
 		return $this;
 	}
@@ -142,9 +161,9 @@ class DisplayLogicCriteria extends SS_Object {
 
 	/**
 	 * Adds a new criterion
-	 * @param DisplayLogicCriterion $c
+	 * @param DisplayLogicCriterion|DisplayLogicCriteria $c
 	 */
-	public function addCriterion(DisplayLogicCriterion $c) {		
+	public function addCriterion($c) {
 		$this->criteria[] = $c;
 	}
 
@@ -168,7 +187,27 @@ class DisplayLogicCriteria extends SS_Object {
 		return $this->logicalOperator == "or" ? "||" : "&&";
 	}
 
+	/**
+	 * Accessor for the master field
+	 * @return string
+	 */
+	public function getMaster() {
+		return $this->master;
+	}
 
+	/**
+	 * @return $this
+	 */
+	public function setMaster($fieldName) {
+		$this->master = $fieldName;
+		$criteria = $this->getCriteria();
+		if ($criteria) {
+			foreach ($criteria as $criterion) {
+				$criterion->setMaster($fieldName);
+			}
+		}
+		return $this;
+	}
 
 	/**
 	 * Creates a nested {@link DisplayLogicCriteria}
@@ -176,6 +215,35 @@ class DisplayLogicCriteria extends SS_Object {
 	 */
 	public function group() {
 		return DisplayLogicCriteria::create($this->slave, $this->master, $this);
+	}
+
+
+
+	/**
+	 *
+	 * Defines the animation method to use
+	 * @param string $animation
+	 * @return DisplayLogicCriteria
+	 */
+	public function useAnimation($animation) {
+		if(in_array($animation, $this->config()->animations)) {
+			$this->animation = $animation;
+		}
+		return $this;
+	}
+
+
+
+
+	/**
+	 * Answers the animation method to use
+	 * @return string
+	 */
+	public function getAnimation() {
+		if(!$this->animation) {
+			return $this->config()->default_animation;
+		}
+		return $this->animation;
 	}
 
 
@@ -188,6 +256,7 @@ class DisplayLogicCriteria extends SS_Object {
 	public function end() {
 		if($this->parent) {
 			$this->parent->addCriterion($this);
+			return $this->parent;
 		}
 		return $this->slave;
 	}
@@ -196,7 +265,7 @@ class DisplayLogicCriteria extends SS_Object {
 
 
 	/**
-	 * Creates a JavaScript readable representation of the logic	 
+	 * Creates a JavaScript readable representation of the logic
 	 * @return string
 	 */
 	public function toScript() {
@@ -206,7 +275,7 @@ class DisplayLogicCriteria extends SS_Object {
 			$script .= $first ? "" :  " {$this->getLogicalOperator()} ";
 			$script .= $c->toScript();
 			$first = false;
-		}	
+		}
 		$script .= ")";
 		return $script;
 	}
@@ -222,7 +291,7 @@ class DisplayLogicCriteria extends SS_Object {
 		$list = array ();
 		foreach($this->getCriteria() as $c) {
 			if($c instanceof DisplayLogicCriteria) {
-				$list += $c->getMasterList();
+				$list=array_merge($list, $c->getMasterList());
 			}
 			else {
 				$list[] = $c->getMaster();

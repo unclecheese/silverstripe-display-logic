@@ -70,16 +70,22 @@ class DisplayLogicCriterion extends SS_Object {
 		return $this->master;
 	}
 
-
+	/**
+	 * @return $this
+	 */
+	public function setMaster($fieldName) {
+		$this->master = $fieldName;
+		return $this;
+	}
 
 
 	/**
 	 * Creates a JavaScript-readable representation of this criterion
 	 * @return string
 	 */
-	public function toScript() {		
+	public function toScript() {
 		return sprintf(
-			"this.closest('form').find(this.escapeSelector('#%s')).evaluate%s('%s')",
+			"this.findHolder('%s').evaluate%s('%s')",
 			$this->master,
 			$this->operator,
 			addslashes($this->value)
