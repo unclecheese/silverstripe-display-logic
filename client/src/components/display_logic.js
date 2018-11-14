@@ -1,19 +1,23 @@
-import $ from 'jquery';
+/* global window */
+import jQuery from 'jquery';
 
 
-$.noConflict();
+jQuery.noConflict();
 
 window.ss = window.ss || {};
 
 
-$.entwine('ss', ($) => {
+jQuery.entwine('ss', ($) => {
   const animation = {
     toggle: {
       show(el) {
-        el.show();
+        const element = el[0];
+        element.style.display = '';
+        element.classList.remove('display-logic-hidden');
       },
       hide(el) {
-        el.hide();
+        const element = el[0];
+        element.style.display = 'none';
       }
     },
     slide: {
@@ -33,8 +37,7 @@ $.entwine('ss', ($) => {
       }
     },
 
-    perform(el, result, method) {
-      if (typeof method === 'undefined') method = 'toggle';
+    perform(el, result, method = 'toggle') {
       if (result) {
         this[method].show(el);
       } else {
@@ -170,19 +173,21 @@ $.entwine('ss', ($) => {
       }
 
       masters = this.getMasters();
+      if (masters && masters.length) {
+        Object.entries(masters).forEach(entry => {
+          const [, selector] = entry;
+          const holderName = this.nameToHolder(this.escapeSelector(selector));
+          const master = this.closest('form').find(this.escapeSelector(`#${holderName}`));
+          if (!master.is('.readonly')) allReadonly = false;
 
-      for (const m in masters) {
-        const holderName = this.nameToHolder(this.escapeSelector(masters[m]));
-        const master = this.closest('form').find(this.escapeSelector(`#${holderName}`));
-        if (!master.is('.readonly')) allReadonly = false;
-
-        master.addClass('display-logic-master');
-        if (master.find('input[type=radio]').length) {
-          master.addClass('optionset');
-        }
-        if (master.find('input[type=checkbox]').length > 1) {
-          master.addClass('checkboxset');
-        }
+          master.addClass('display-logic-master');
+          if (master.find('input[type=radio]').length) {
+            master.addClass('optionset');
+          }
+          if (master.find('input[type=checkbox]').length > 1) {
+            master.addClass('checkboxset');
+          }
+        });
       }
 
       // If all the masters are readonly fields, the field has no way of displaying.
@@ -197,6 +202,7 @@ $.entwine('ss', ($) => {
 
     parseLogic() {
       const js = this.getLogic();
+      // eslint-disable-next-line no-new-func
       return new Function(`return ${js}`).bind(this)();
     },
 
@@ -322,12 +328,13 @@ $.entwine('ss', ($) => {
       const listeners = [];
       this.closest('form').find('.display-logic').each(function () {
         const masters = $(this).getMasters();
-        for (const m in masters) {
-          if (!masters.hasOwnProperty(m)) continue;
-          if (self.nameToHolder(masters[m]) === self.attr('id')) {
-            listeners.push($(this)[0]);
-            break;
-          }
+        if (masters && masters.length) {
+          Object.entries(masters).forEach(entry => {
+            const [, selector] = entry;
+            if (self.nameToHolder(selector) === self.attr('id')) {
+              listeners.push($(this)[0]);
+            }
+          });
         }
       });
       this.setListeners(listeners);
