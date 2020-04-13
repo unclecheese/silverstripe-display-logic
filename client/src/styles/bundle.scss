@@ -2,6 +2,9 @@ div.field.display-logic-hidden,
 div.displaylogicwrapper.display-logic-hidden {
 	display:none;
 }
+div.displaylogicwrapper.display-logic {
+    position: relative;
+}
 
 @media (min-width: 992px) {
 
