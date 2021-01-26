@@ -92,7 +92,7 @@ $shipping->displayIf("ProductType")->isEqualTo("furniture")
 ```php
 <?php
 
-use UncleCheese\DisplayLogic\Wrapper;
+use UncleCheese\DisplayLogic\Forms\Wrapper;
 //...
   public function getCMSFields() {
         $f = parent::getCMSFields();
@@ -107,7 +107,7 @@ use UncleCheese\DisplayLogic\Wrapper;
                 ->displayIf("Vendors")->hasCheckedAtLeast(3)->end(),
             CheckboxField::create('HasUpload', 'Has an upload'),
             
-            DisplayLogicWrapper::create(
+            Wrapper::create(
             	UploadField::create('FileUpload', 'Upload a file'),
             	LiteralField::create('test', '<strong>Keep the file small!</strong>')
             )->displayIf('HasUpload')->isChecked()->end(),
