@@ -42,7 +42,7 @@
     "deep-freeze-strict": "^1.1.1",
     "detect-browser": "^1.12.0",
     "es6-promise": "^3.1.2",
-    "merge": "^1.2.0",
+    "merge": "^2.1.1",
     "modernizr": "^3.5.0",
     "moment": "^2.18.1",
     "page.js": "^4.13.3",
