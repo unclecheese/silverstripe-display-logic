@@ -90,7 +90,7 @@ class Criterion
             "this.findHolder('%s').evaluate%s('%s')",
             $this->master,
             $this->operator,
-            addslashes($this->value)
+            addslashes($this->value ?? '')
         );
     }
 }
