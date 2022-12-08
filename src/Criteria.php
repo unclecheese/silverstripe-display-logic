@@ -259,7 +259,7 @@ class Criteria
     {
         if ($this->parent) {
             $this->parent->addCriterion($this);
-            return $this->parent;
+            return $this->parent->end();
         }
         return $this->slave;
     }
