@@ -10,12 +10,13 @@
 
 namespace UncleCheese\DisplayLogic;
 
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Forms\FormField;
 use BadMethodCallException;
+use OutOfRangeException;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Forms\FormField;
 
 class Criteria
 {
@@ -252,8 +253,9 @@ class Criteria
     }
 
     /**
-     * Ends the chaining and returns the parent object, either {@link Criteria} or {@link FormField}
-     * @return FormField/Criteria
+     * Ends the chaining and returns the parent {@link FormField}.
+     * Works recursively if in a group {@link Criteria} context
+     * @return FormField
      */
     public function end()
     {
@@ -262,6 +264,21 @@ class Criteria
             return $this->parent->end();
         }
         return $this->slave;
+    }
+
+    /**
+     * Escape a group {@link Criteria}
+     * @return Criteria the parent Criteria
+     * @throws LogicException if there is no parent Criteria
+     */
+    public function endGroup()
+    {
+        if (!$this->parent) {
+            $message = __FUNCTION__ . 'called on Criteria with no parent (not in a group).';
+            $message .= ' Call group() before endGroup(), or perhaps you\'re looking for end() instead.';
+            throw new OutOfRangeException($message);
+        }
+        return $this->parent;
     }
 
     /**
