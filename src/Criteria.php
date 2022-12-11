@@ -35,13 +35,13 @@ class Criteria
      * The name of the form field that depends on the criteria
      * @var string
      */
-    protected $master = null;
+    protected $dispatcher = null;
 
     /**
-     * The form field that responds to the state of {@link $master}
+     * The form field that responds to the state of {@link $dispatcher}
      * @var FormField
      */
-    protected $slave = null;
+    protected $responder = null;
 
     /**
      * A parent {@link Criteria}, for grouping
@@ -80,14 +80,14 @@ class Criteria
 
     /**
      * Constructor
-     * @param FormField $slave  The form field that responds to changes of another form field
-     * @param [type]    $master The name of the form field to respond to
+     * @param FormField $responder  The form field that responds to changes of another form field
+     * @param [type]    $dispatcher The name of the form field to respond to
      * @param [type]    $parent The parent {@link Criteria}
      */
-    public function __construct(FormField $slave, $master, $parent = null)
+    public function __construct(FormField $responder, $dispatcher, $parent = null)
     {
-        $this->slave = $slave;
-        $this->master = $master;
+        $this->responder = $responder;
+        $this->dispatcher = $dispatcher;
         $this->parent = $parent;
         return $this;
     }
@@ -108,7 +108,7 @@ class Criteria
                 $operator = ucwords($method);
             }
 
-            $this->addCriterion(Criterion::create($this->master, $operator, $val, $this));
+            $this->addCriterion(Criterion::create($this->dispatcher, $operator, $val, $this));
             return $this;
         }
         if (method_exists($this, $method)) {
@@ -128,22 +128,22 @@ class Criteria
      */
     public function isBetween($min, $max)
     {
-        $this->addCriterion(Criterion::create($this->master, "Between", "{$min}-{$max}", $this));
+        $this->addCriterion(Criterion::create($this->dispatcher, "Between", "{$min}-{$max}", $this));
         return $this;
     }
 
     /**
      * Adds a new criterion, and makes this set use conjuctive logic
-     * @param  string $master The master form field
+     * @param  string $dispatcher The dispatcher form field
      * @return Criteria
      */
-    public function andIf($master = null)
+    public function andIf($dispatcher = null)
     {
         if ($this->logicalOperator === self::LOGIC_OR) {
             user_error("Criteria: Cannot declare a logical operator more than once. (Specified andIf() after calling orIf()). Use a nested DisplayLogicCriteriaSet to combine conjunctive and disjuctive logic.", E_USER_ERROR);
         }
-        if ($master) {
-            $this->master = $master;
+        if ($dispatcher) {
+            $this->dispatcher = $dispatcher;
         }
         $this->logicalOperator = self::LOGIC_AND;
         return $this;
@@ -151,16 +151,16 @@ class Criteria
 
     /**
      * Adds a new criterion, and makes this set use disjunctive logic
-     * @param  string $master The master form field
+     * @param  string $dispatcher The dispatcher form field
      * @return Criteria
      */
-    public function orIf($master = null)
+    public function orIf($dispatcher = null)
     {
         if ($this->logicalOperator === self::LOGIC_AND) {
             user_error("Criteria: Cannot declare a logical operator more than once. (Specified orIf() after calling andIf()). Use a nested DisplayLogicCriteriaSet to combine conjunctive and disjuctive logic.", E_USER_ERROR);
         }
-        if ($master) {
-            $this->master = $master;
+        if ($dispatcher) {
+            $this->dispatcher = $dispatcher;
         }
         $this->logicalOperator = self::LOGIC_OR;
         return $this;
@@ -194,24 +194,24 @@ class Criteria
     }
 
     /**
-     * Accessor for the master field
+     * Accessor for the dispatcher field
      * @return string
      */
-    public function getMaster()
+    public function getDispatcher()
     {
-        return $this->master;
+        return $this->dispatcher;
     }
 
     /**
      * @return $this
      */
-    public function setMaster($fieldName)
+    public function setDispatcher($fieldName)
     {
-        $this->master = $fieldName;
+        $this->dispatcher = $fieldName;
         $criteria = $this->getCriteria();
         if ($criteria) {
             foreach ($criteria as $criterion) {
-                $criterion->setMaster($fieldName);
+                $criterion->setDispatcher($fieldName);
             }
         }
         return $this;
@@ -223,7 +223,7 @@ class Criteria
      */
     public function group()
     {
-        return Criteria::create($this->slave, $this->master, $this);
+        return Criteria::create($this->responder, $this->dispatcher, $this);
     }
 
     /**
@@ -263,7 +263,7 @@ class Criteria
             $this->parent->addCriterion($this);
             return $this->parent->end();
         }
-        return $this->slave;
+        return $this->responder;
     }
 
     /**
@@ -299,17 +299,17 @@ class Criteria
     }
 
     /**
-     * Gets a list of all the master fields in this criteria set
+     * Gets a list of all the dispatcher fields in this criteria set
      * @return string
      */
-    public function getMasterList()
+    public function getDispatcherList()
     {
         $list = [];
         foreach ($this->getCriteria() as $c) {
             if ($c instanceof Criteria) {
-                $list = array_merge($list, $c->getMasterList());
+                $list = array_merge($list, $c->getDispatcherList());
             } else {
-                $list[] = $c->getMaster();
+                $list[] = $c->getDispatcher();
             }
         }
         return $list;

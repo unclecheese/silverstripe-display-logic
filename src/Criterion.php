@@ -13,6 +13,7 @@ namespace UncleCheese\DisplayLogic;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Dev\Deprecation;
 
 class Criterion
 {
@@ -27,7 +28,7 @@ class Criterion
      * The name of the form field that is controlling the display
      * @var string
      */
-    protected $master = null;
+    protected $dispatcher = null;
 
     /**
      * The comparison function to use, e.g. "EqualTo"
@@ -49,34 +50,48 @@ class Criterion
 
     /**
      * Constructor
-     * @param string               $master   The name of the master field
+     * @param string               $dispatcher   The name of the dispatcher field
      * @param string               $operator The name of the comparison function
      * @param string               $value    The value to compare to
      * @param Criteria $set      The parent criteria set
      */
-    public function __construct($master, $operator, $value, Criteria $set)
+    public function __construct($dispatcher, $operator, $value, Criteria $set)
     {
-        $this->master = $master;
+        $this->dispatcher = $dispatcher;
         $this->operator = $operator;
         $this->value = $value;
         $this->set = $set;
     }
 
     /**
-     * Accessor for the master field
+     * Accessor for the dispatcher field
      * @return string
      */
-    public function getMaster()
+    public function getDispatcher()
     {
-        return $this->master;
+        return $this->dispatcher;
     }
 
     /**
      * @return $this
      */
+    public function setDispatcher($fieldName)
+    {
+        $this->dispatcher = $fieldName;
+        return $this;
+    }
+
+    public function getMaster()
+    {
+        Deprecation::notice('2.0.6', __FUNCTION__ . ' is deprecated. Please use getDispatcher() instead.');
+        return $this->dispatcher;
+    }
+
     public function setMaster($fieldName)
     {
-        $this->master = $fieldName;
+        Deprecation::notice('2.0.6', __FUNCTION__ . ' is deprecated. Please use setDispatcher($fieldName) instead.');
+        $this->dispatcher = $fieldName;
+
         return $this;
     }
 
@@ -88,7 +103,7 @@ class Criterion
     {
         return sprintf(
             "this.findHolder('%s').evaluate%s('%s')",
-            $this->master,
+            $this->dispatcher,
             $this->operator,
             addslashes($this->value ?? '')
         );
