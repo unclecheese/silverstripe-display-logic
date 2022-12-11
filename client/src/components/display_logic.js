@@ -47,7 +47,7 @@ jQuery.entwine('ss', ($) => {
   };
 
 
-  $('div.display-logic, div.display-logic-master').entwine({
+  $('div.display-logic, div.display-logic-dispatcher').entwine({
 
     escapeSelector(selector) {
       return selector.replace(/(\[)/g, '_').replace(/(\])/g, '');
@@ -163,35 +163,35 @@ jQuery.entwine('ss', ($) => {
 
     onmatch() {
       let allReadonly = true;
-      let masters = [];
+      let dispatchers = [];
       const field = this.getFormField();
 
-      if (field.data('display-logic-eval') && field.data('display-logic-masters')) {
+      if (field.data('display-logic-eval') && field.data('display-logic-dispatchers')) {
         this.data('display-logic-eval', field.data('display-logic-eval'))
-          .data('display-logic-masters', field.data('display-logic-masters'))
+          .data('display-logic-dispatchers', field.data('display-logic-dispatchers'))
           .data('display-logic-animation', field.data('display-logic-animation'));
       }
 
-      masters = this.getMasters();
-      if (masters && masters.length) {
-        Object.entries(masters).forEach(entry => {
+      dispatchers = this.getDispatchers();
+      if (dispatchers && dispatchers.length) {
+        Object.entries(dispatchers).forEach(entry => {
           const [, selector] = entry;
           const holderName = this.nameToHolder(this.escapeSelector(selector));
-          const master = this.closest('form').find(this.escapeSelector(`#${holderName}`));
-          if (!master.is('.readonly')) allReadonly = false;
+          const dispatcher = this.closest('form').find(this.escapeSelector(`#${holderName}`));
+          if (!dispatcher.is('.readonly')) allReadonly = false;
 
-          master.addClass('display-logic-master');
-          if (master.find('input[type=radio]').length) {
-            master.addClass('optionset');
+          dispatcher.addClass('display-logic-dispatcher');
+          if (dispatcher.find('input[type=radio]').length) {
+            dispatcher.addClass('optionset');
           }
-          if (master.find('input[type=checkbox]').length > 1) {
-            master.addClass('checkboxset');
+          if (dispatcher.find('input[type=checkbox]').length > 1) {
+            dispatcher.addClass('checkboxset');
           }
         });
       }
 
-      // If all the masters are readonly fields, the field has no way of displaying.
-      if (masters.length && allReadonly) {
+      // If all the dispatchers are readonly fields, the field has no way of displaying.
+      if (dispatchers.length && allReadonly) {
         this.show();
       }
     },
@@ -206,9 +206,9 @@ jQuery.entwine('ss', ($) => {
       return new Function(`return ${js}`).bind(this)();
     },
 
-    getMasters() {
-      const masters = this.getFormField().data('display-logic-masters');
-      return (masters) ? masters.split(',') : [];
+    getDispatchers() {
+      const dispatchers = this.getFormField().data('display-logic-dispatchers');
+      return (dispatchers) ? dispatchers.split(',') : [];
     },
 
     getAnimationTargets() {
@@ -263,44 +263,44 @@ jQuery.entwine('ss', ($) => {
   });
 
 
-  $('div.display-logic-master input[type="text"], ' +
-    'div.display-logic-master input[type="email"], ' +
-    'div.display-logic-master input[type="numeric"]').entwine({
+  $('div.display-logic-dispatcher input[type="text"], ' +
+    'div.display-logic-dispatcher input[type="email"], ' +
+    'div.display-logic-dispatcher input[type="numeric"]').entwine({
     onmatch() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     },
 
     onkeyup() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     },
 
     onchange() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     }
   });
 
 
-  $('div.display-logic-master select').entwine({
+  $('div.display-logic-dispatcher select').entwine({
     onmatch() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     },
 
     onchange() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     }
   });
 
-  $('div.display-logic-master :checkbox, div.display-logic-master :radio').entwine({
+  $('div.display-logic-dispatcher :checkbox, div.display-logic-dispatcher :radio').entwine({
     onmatch() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     },
 
     onclick() {
-      this.closest('.display-logic-master').notify();
+      this.closest('.display-logic-dispatcher').notify();
     }
   });
 
-  $('div.display-logic.optionset, div.display-logic-master.optionset').entwine({
+  $('div.display-logic.optionset, div.display-logic-dispatcher.optionset').entwine({
     getFieldValue() {
       return this.find(':checked').val();
     },
@@ -310,7 +310,7 @@ jQuery.entwine('ss', ($) => {
 
   });
 
-  $('div.display-logic-master').entwine({
+  $('div.display-logic-dispatcher').entwine({
     Listeners: null,
 
     notify() {
@@ -327,9 +327,9 @@ jQuery.entwine('ss', ($) => {
       const self = this;
       const listeners = [];
       this.closest('form').find('.display-logic').each(function () {
-        const masters = $(this).getMasters();
-        if (masters && masters.length) {
-          Object.entries(masters).forEach(entry => {
+        const dispatchers = $(this).getDispatchers();
+        if (dispatchers && dispatchers.length) {
+          Object.entries(dispatchers).forEach(entry => {
             const [, selector] = entry;
             if (self.nameToHolder(selector) === self.attr('id')) {
               listeners.push($(this)[0]);
