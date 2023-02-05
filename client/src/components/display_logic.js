@@ -265,7 +265,7 @@ jQuery.entwine('ss', ($) => {
 
   $('div.display-logic-master input[type="text"], ' +
     'div.display-logic-master input[type="email"], ' +
-    'div.display-logic-master input[type="numeric"]').entwine({
+    'div.display-logic-master input[type="number"]').entwine({
     onmatch() {
       this.closest('.display-logic-master').notify();
     },
