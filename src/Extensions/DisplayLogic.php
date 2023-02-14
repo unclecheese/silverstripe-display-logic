@@ -1,40 +1,40 @@
 <?php
 
-/**
- *  Decorates a {@link FormField} object with methods for displaying/hiding
- *
- * @package  display_logic
- * @author  Uncle Cheese <unclecheese@leftandmain.com>
- */
-
 namespace UncleCheese\DisplayLogic\Extensions;
 
 use SilverStripe\Core\Extension;
+use SilverStripe\Forms\FormField;
 use SilverStripe\View\Requirements;
 use UncleCheese\DisplayLogic\Criteria;
 
+/**
+ * Decorates a {@link FormField} object with methods for displaying/hiding
+ *
+ * @author Uncle Cheese <unclecheese@leftandmain.com>
+ * @property FormField $owner
+ */
 class DisplayLogic extends Extension
 {
 
+    /**
+     * @var Criteria[]
+     */
     protected array $displayLogicCriteria = [];
 
-    /**
-     * @param Criteria $criteria
-     * @return Criteria
-     */
-    public function setDisplayLogicCriteria(Criteria $criteria)
+    public function setDisplayLogicCriteria(Criteria $criteria): Criteria
     {
         $id = $this->owner->getName();
         $this->displayLogicCriteria[$id] = $criteria;
+
         return $criteria;
     }
 
     /**
      * If the criteria evaluate true, the field should display
-     * @param  string $master The name of the master field
-     * @return Criteria
+     *
+     * @param string $master The name of the master field
      */
-    public function displayIf($master)
+    public function displayIf(string $master): Criteria
     {
         $class ="display-logic display-logic-hidden display-logic-display";
         $this->owner->addExtraClass($class);
@@ -49,10 +49,10 @@ class DisplayLogic extends Extension
     /**
      * If the criteria evaluate true, the field should hide.
      * The field will be hidden with CSS on page load, before the script loads.
-     * @param  string $master The name of the master field
-     * @return Criteria
+     *
+     * @param string $master The name of the master field
      */
-    public function hideIf($master)
+    public function hideIf(string $master): Criteria
     {
         $class = "display-logic display-logic-hide";
         $this->owner->addExtraClass($class);
@@ -65,11 +65,11 @@ class DisplayLogic extends Extension
 
     /**
      * If the criteria evaluate true, the field should hide.
-     * The field will displayed before the script loads.
-     * @param  string $master The name of the master field
-     * @return Criteria
+     * The field will be displayed before the script loads.
+     *
+     * @param string $master The name of the master field
      */
-    public function displayUnless($master)
+    public function displayUnless(string $master): Criteria
     {
         return $this->owner->hideIf($master);
     }
@@ -77,62 +77,62 @@ class DisplayLogic extends Extension
     /**
      * If the criteria evaluate true, the field should display.
      * The field will be hidden with CSS on page load, before the script loads.
-     * @param  string $master The name of the master field
-     * @return Criteria
+     *
+     * @param string $master The name of the master field
      */
-    public function hideUnless($master)
+    public function hideUnless(string $master): Criteria
     {
         return $this->owner->displayIf($master);
     }
 
 
-    public function getDisplayLogicCriteria()
+    public function getDisplayLogicCriteria(): ?Criteria
     {
         $id = $this->owner->getName();
-        return isset($this->displayLogicCriteria[$id]) ? $this->displayLogicCriteria[$id] : null;
+
+        return $this->displayLogicCriteria[$id] ?? null;
     }
 
     /**
      * A comma-separated list of the master form fields that control the display of this field
-     *
-     * @return  string
      */
-    public function DisplayLogicMasters()
+    public function DisplayLogicMasters(): ?string
     {
         if ($criteria = $this->getDisplayLogicCriteria()) {
-            return implode(",", array_unique($criteria->getMasterList()));
+            return implode(",", array_unique($criteria->getPrimaryList()));
         }
+
+        return null;
     }
 
     /**
      * Answers the animation method to use from the criteria object
-     *
-     * @return string
      */
-    public function DisplayLogicAnimation()
+    public function DisplayLogicAnimation(): ?string
     {
         if ($criteria = $this->getDisplayLogicCriteria()) {
             return $criteria->getAnimation();
         }
+
+        return null;
     }
 
     /**
      * Loads the dependencies and renders the JavaScript-readable logic to the form HTML
-     *
-     * @return  string
      */
-    public function DisplayLogic()
+    public function DisplayLogic(): ?string
     {
         if ($criteria = $this->getDisplayLogicCriteria()) {
             Requirements::javascript('unclecheese/display-logic: client/dist/js/bundle.js');
             Requirements::css('unclecheese/display-logic: client/dist/styles/bundle.css');
+
             return $criteria->toScript();
         }
 
-        return false;
+        return null;
     }
 
-    public function onBeforeRender($field)
+    public function onBeforeRender($field): void
     {
         if ($logic = $field->DisplayLogic()) {
             $field->setAttribute('data-display-logic-masters', $field->DisplayLogicMasters());
@@ -140,4 +140,5 @@ class DisplayLogic extends Extension
             $field->setAttribute('data-display-logic-animation', $field->DisplayLogicAnimation());
         }
     }
+
 }
