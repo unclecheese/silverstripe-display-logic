@@ -16,10 +16,7 @@ use UncleCheese\DisplayLogic\Criteria;
 class DisplayLogic extends Extension
 {
 
-    /**
-     * @var array
-     */
-    protected $displayLogicCriteria = [];
+    protected array $displayLogicCriteria = [];
 
     /**
      * @param Criteria $criteria
@@ -131,7 +128,7 @@ class DisplayLogic extends Extension
             Requirements::css('unclecheese/display-logic: client/dist/styles/bundle.css');
             return $criteria->toScript();
         }
-        
+
         return false;
     }
 

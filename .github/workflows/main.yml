@@ -1,0 +1,9 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    uses: silverstripe/gha-ci/.github/workflows/ci.yml@v1
