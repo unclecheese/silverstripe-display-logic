@@ -9,8 +9,7 @@ default:
   suites:
     display-logic:
       paths:
-        - %paths.modules.display-logic%/tests/behat/features
-        - %paths.modules.display-logic%/tests/behat/bootstrap/remove-test-page.feature
+        - '%paths.modules.display-logic%/tests/behat/features'
       contexts:
         - UncleCheese\DisplayLogic\Tests\Behaviour\FeatureContext
         - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
@@ -18,17 +17,14 @@ default:
         - SilverStripe\BehatExtension\Context\BasicContext
         - SilverStripe\BehatExtension\Context\EmailContext
         - SilverStripe\BehatExtension\Context\LoginContext
-        -
-          SilverStripe\Framework\Tests\Behaviour\ConfigContext:
-            - %paths.modules.display-logic%/tests/behat/files/
-        -
-          UncleCheese\DisplayLogic\Tests\Behaviour\FixtureContext:
-            - %paths.modules.display-logic%/tests/behat/bootstrap/
+        - UncleCheese\DisplayLogic\Tests\Behaviour\FixtureContext:
+            # Note: double indent for args is intentional
+            - '%paths.modules.display-logic%/tests/behat/features/files/'
 
   extensions:
     SilverStripe\BehatExtension\Extension:
       bootstrap_file: vendor/silverstripe/cms/tests/behat/serve-bootstrap.php
-      screenshot_path: %paths.base%/artifacts/screenshots
+      screenshot_path: '%paths.base%/artifacts/screenshots'
       retry_seconds: 4 # default is 2
     SilverStripe\BehatExtension\MinkExtension:
       default_session: facebook_web_driver
