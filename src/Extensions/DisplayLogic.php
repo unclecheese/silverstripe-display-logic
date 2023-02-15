@@ -32,9 +32,9 @@ class DisplayLogic extends Extension
     /**
      * If the criteria evaluate true, the field should display
      *
-     * @param string $master The name of the master field
+     * @param string $dispatcher The name of the form field that is controlling the display
      */
-    public function displayIf(string $master): Criteria
+    public function displayIf(string $dispatcher): Criteria
     {
         $class ="display-logic display-logic-hidden display-logic-display";
         $this->owner->addExtraClass($class);
@@ -43,16 +43,16 @@ class DisplayLogic extends Extension
             $this->owner->addHolderClass($class);
         }
 
-        return $this->setDisplayLogicCriteria(Criteria::create($this->owner, $master));
+        return $this->setDisplayLogicCriteria(Criteria::create($this->owner, $dispatcher));
     }
 
     /**
      * If the criteria evaluate true, the field should hide.
      * The field will be hidden with CSS on page load, before the script loads.
      *
-     * @param string $master The name of the master field
+     * @param string $dispatcher The name of the form field that is controlling the display
      */
-    public function hideIf(string $master): Criteria
+    public function hideIf(string $dispatcher): Criteria
     {
         $class = "display-logic display-logic-hide";
         $this->owner->addExtraClass($class);
@@ -60,29 +60,29 @@ class DisplayLogic extends Extension
         if ($this->owner->hasMethod('addHolderClass')) {
             $this->owner->addHolderClass($class);
         }
-        return $this->setDisplayLogicCriteria(Criteria::create($this->owner, $master));
+        return $this->setDisplayLogicCriteria(Criteria::create($this->owner, $dispatcher));
     }
 
     /**
      * If the criteria evaluate true, the field should hide.
      * The field will be displayed before the script loads.
      *
-     * @param string $master The name of the master field
+     * @param string $dispatcher The name of the form field that is controlling the display
      */
-    public function displayUnless(string $master): Criteria
+    public function displayUnless(string $dispatcher): Criteria
     {
-        return $this->owner->hideIf($master);
+        return $this->owner->hideIf($dispatcher);
     }
 
     /**
      * If the criteria evaluate true, the field should display.
      * The field will be hidden with CSS on page load, before the script loads.
      *
-     * @param string $master The name of the master field
+     * @param string $dispatcher The name of the form field that is controlling the display
      */
-    public function hideUnless(string $master): Criteria
+    public function hideUnless(string $dispatcher): Criteria
     {
-        return $this->owner->displayIf($master);
+        return $this->owner->displayIf($dispatcher);
     }
 
 
@@ -94,9 +94,9 @@ class DisplayLogic extends Extension
     }
 
     /**
-     * A comma-separated list of the master form fields that control the display of this field
+     * A comma-separated list of the dispatcher form fields that control the display of this field
      */
-    public function DisplayLogicMasters(): ?string
+    public function DisplayLogicDispatchers(): ?string
     {
         if ($criteria = $this->getDisplayLogicCriteria()) {
             return implode(",", array_unique($criteria->getPrimaryList()));
@@ -135,7 +135,7 @@ class DisplayLogic extends Extension
     public function onBeforeRender($field): void
     {
         if ($logic = $field->DisplayLogic()) {
-            $field->setAttribute('data-display-logic-masters', $field->DisplayLogicMasters());
+            $field->setAttribute('data-display-logic-dispatchers', $field->DisplayLogicDispatchers());
             $field->setAttribute('data-display-logic-eval', $logic);
             $field->setAttribute('data-display-logic-animation', $field->DisplayLogicAnimation());
         }

@@ -26,7 +26,7 @@ class Criterion
     /**
      * The name of the form field that is controlling the display
      */
-    protected string $primary;
+    protected string $dispatcher;
 
     /**
      * The comparison function to use, e.g. "EqualTo"
@@ -45,27 +45,27 @@ class Criterion
 
     /**
      * Constructor
-     * @param string $primary The name of the primary field
+     * @param string $dispatcher The name of the form field that is controlling the display
      * @param string $operator The name of the comparison function
      * @param mixed $value The value to compare to
      * @param Criteria $set The parent criteria set
      */
-    public function __construct(string $primary, string $operator, mixed $value, Criteria $set)
+    public function __construct(string $dispatcher, string $operator, mixed $value, Criteria $set)
     {
-        $this->primary = $primary;
+        $this->dispatcher = $dispatcher;
         $this->operator = $operator;
         $this->value = $value;
         $this->set = $set;
     }
 
-    public function getPrimary(): string
+    public function getDispatcher(): string
     {
-        return $this->primary;
+        return $this->dispatcher;
     }
 
-    public function setPrimary(string $fieldName): Criterion
+    public function setDispatcher(string $fieldName): Criterion
     {
-        $this->primary = $fieldName;
+        $this->dispatcher = $fieldName;
 
         return $this;
     }
@@ -77,7 +77,7 @@ class Criterion
     {
         return sprintf(
             "this.findHolder('%s').evaluate%s('%s')",
-            $this->primary,
+            $this->dispatcher,
             $this->operator,
             addslashes($this->value ?? '')
         );
