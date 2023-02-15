@@ -2,8 +2,7 @@
   "name": "display-logic",
   "version": "4.0.0",
   "description": "Display logic module for interface",
-  "directories": {
-  },
+  "directories": {},
   "bin": {
     "webpack": "./node_modules/webpack/webpack.js"
   },
@@ -42,6 +41,7 @@
     "deep-freeze-strict": "^1.1.1",
     "detect-browser": "^1.12.0",
     "es6-promise": "^3.1.2",
+    "jquery": "3",
     "merge": "^1.2.0",
     "modernizr": "^3.5.0",
     "moment": "^2.18.1",
