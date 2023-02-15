@@ -327,7 +327,7 @@ jQuery.entwine('ss', ($) => {
       const self = this;
       const listeners = [];
       this.closest('form').find('.display-logic').each(function () {
-        const dispatchers = $(this).getdispatchers();
+        const dispatchers = $(this).getDispatchers();
         if (dispatchers && dispatchers.length) {
           Object.entries(dispatchers).forEach(entry => {
             const [, selector] = entry;
