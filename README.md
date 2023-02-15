@@ -141,7 +141,7 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
 ```
 
 ## Dealing with non-standard form fields
-Sometimes you will want to wrap display logic around a form field that does not use the standard FormField template, such as GridField or LiteralField. For these cases, you can wrap the form field in UncleCheese\DisplayLogic\Wrapper.
+Sometimes you will want to wrap display logic around a form field that does not use the standard FormField template, such as GridField or LiteralField. For these cases, you can wrap the form field in UncleCheese\DisplayLogic\Forms\Wrapper.
 ```php
 $fields->addFieldToTab("Root.Main", Wrapper::create(
 		LiteralField::create("foo","<h2>Hello</h2>")
