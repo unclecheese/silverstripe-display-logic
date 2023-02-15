@@ -172,7 +172,7 @@ jQuery.entwine('ss', ($) => {
           .data('display-logic-animation', field.data('display-logic-animation'));
       }
 
-      dispatchers = this.getdispatchers();
+      dispatchers = this.getDispatchers();
       if (dispatchers && dispatchers.length) {
         Object.entries(dispatchers).forEach(entry => {
           const [, selector] = entry;
