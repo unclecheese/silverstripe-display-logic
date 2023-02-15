@@ -206,7 +206,7 @@ jQuery.entwine('ss', ($) => {
       return new Function(`return ${js}`).bind(this)();
     },
 
-    getdispatchers() {
+    getDispatchers() {
       const dispatchers = this.getFormField().data('display-logic-dispatchers');
       return (dispatchers) ? dispatchers.split(',') : [];
     },
