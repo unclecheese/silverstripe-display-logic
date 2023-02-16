@@ -306,7 +306,7 @@ class Criteria
     /**
      * Gets a list of all the dispatcher fields in this criteria set
      */
-    public function getPrimaryList(): array
+    public function getDispatcherList(): array
     {
         $list = [];
 
