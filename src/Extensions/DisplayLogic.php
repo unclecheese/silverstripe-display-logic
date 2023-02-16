@@ -99,7 +99,7 @@ class DisplayLogic extends Extension
     public function DisplayLogicDispatchers(): ?string
     {
         if ($criteria = $this->getDisplayLogicCriteria()) {
-            return implode(",", array_unique($criteria->getPrimaryList()));
+            return implode(",", array_unique($criteria->getDispatcherList()));
         }
 
         return null;
