@@ -312,7 +312,7 @@ class Criteria
 
         foreach ($this->getCriteria() as $c) {
             if ($c instanceof Criteria) {
-                $list = array_merge($list, $c->getPrimaryList());
+                $list = array_merge($list, $c->getDispatcherList());
             } else {
                 $list[] = $c->getDispatcher();
             }
