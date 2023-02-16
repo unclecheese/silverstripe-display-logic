@@ -1,11 +1,9 @@
 /* global window */
 import jQuery from 'jquery';
 
-
 jQuery.noConflict();
 
 window.ss = window.ss || {};
-
 
 jQuery.entwine('ss', ($) => {
   const animation = {
