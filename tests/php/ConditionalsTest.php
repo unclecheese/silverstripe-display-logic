@@ -18,8 +18,8 @@ class ConditionalsTest extends SapphireTest
 		);
 		$output = $form->forTemplate();
 		$contains = 'data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateEqualTo(&#039;100&#039;))"';
-		$this->assertContains($contains, $output);
-		$this->assertContains('data-display-logic-masters="Field1"', $output);
+		$this->assertStringContainsString($contains, $output);
+		$this->assertStringContainsString('data-display-logic-dispatchers="Field1"', $output);
 	}
 
 
@@ -31,8 +31,8 @@ class ConditionalsTest extends SapphireTest
 		);
 		$output = $form->forTemplate();
 		$contains = 'data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateNotEqualTo(&#039;100&#039;))"';
-		$this->assertContains($contains, $output);
-		$this->assertContains('data-display-logic-masters="Field1"', $output);
+		$this->assertStringContainsString($contains, $output);
+		$this->assertStringContainsString('data-display-logic-dispatchers="Field1"', $output);
 	}
 
 	public function testIsGreaterThan()
@@ -43,12 +43,12 @@ class ConditionalsTest extends SapphireTest
 			TextField::create('Field3')->displayIf('Field1')->isGreaterThan('200')->end()
 		);
 		$output = $form->forTemplate();
-		$this->assertContains('data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateGreaterThan(&#039;100&#039;))"', $output);
-		$this->assertContains('data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateGreaterThan(&#039;200&#039;))"', $output);
-		$this->assertContains('data-display-logic-masters="Field1"', $output);
+		$this->assertStringContainsString('data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateGreaterThan(&#039;100&#039;))"', $output);
+		$this->assertStringContainsString('data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateGreaterThan(&#039;200&#039;))"', $output);
+		$this->assertStringContainsString('data-display-logic-dispatchers="Field1"', $output);
 
-		$this->assertEquals(2, substr_count($output, 'data-display-logic-masters="'));
-		$this->assertEquals(2, substr_count($output, 'data-display-logic-masters="Field1"'));
+		$this->assertEquals(2, substr_count($output, 'data-display-logic-dispatchers="'));
+		$this->assertEquals(2, substr_count($output, 'data-display-logic-dispatchers="Field1"'));
 
 	}
 
@@ -59,8 +59,8 @@ class ConditionalsTest extends SapphireTest
 			TextField::create('Field2')->displayIf('Field1')->isLessThan('50')->end()
 		);
 		$output = $form->forTemplate();
-		$this->assertContains('data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateLessThan(&#039;50&#039;))', $output);
-		$this->assertContains('data-display-logic-masters="Field1"', $output);
+		$this->assertStringContainsString('data-display-logic-eval="(this.findHolder(&#039;Field1&#039;).evaluateLessThan(&#039;50&#039;))', $output);
+		$this->assertStringContainsString('data-display-logic-dispatchers="Field1"', $output);
 	}
 
 	public function testAggregatedRules()
@@ -72,9 +72,9 @@ class ConditionalsTest extends SapphireTest
 				->andIf('Field2')->isGreaterThan('80')->end()
 		);
 		$output = $form->forTemplate();
-		$this->assertContains('(this.findHolder(&#039;Field1&#039;).evaluateLessThan(&#039;50&#039;) '
+		$this->assertStringContainsString('(this.findHolder(&#039;Field1&#039;).evaluateLessThan(&#039;50&#039;) '
 			. '&amp;&amp; this.findHolder(&#039;Field2&#039;).evaluateGreaterThan(&#039;80&#039;))', $output);
-		$this->assertContains('data-display-logic-masters="Field1,Field2"', $output);
+		$this->assertStringContainsString('data-display-logic-dispatchers="Field1,Field2"', $output);
 	}
 
 }

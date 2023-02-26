@@ -25,70 +25,59 @@ class Criterion
 
     /**
      * The name of the form field that is controlling the display
-     * @var string
      */
-    protected $master = null;
+    protected string $dispatcher;
 
     /**
      * The comparison function to use, e.g. "EqualTo"
-     * @var string
      */
-    protected $operator = null;
+    protected string $operator;
 
     /**
      * The value to compare to
-     * @var mixed
      */
-    protected $value = null;
+    protected mixed $value = null;
 
     /**
      * The parent {@link Criteria}
-     * @var Criteria
      */
-    protected $set = null;
+    protected Criteria $set;
 
     /**
      * Constructor
-     * @param string               $master   The name of the master field
-     * @param string               $operator The name of the comparison function
-     * @param string               $value    The value to compare to
-     * @param Criteria $set      The parent criteria set
+     * @param string $dispatcher The name of the form field that is controlling the display
+     * @param string $operator The name of the comparison function
+     * @param mixed $value The value to compare to
+     * @param Criteria $set The parent criteria set
      */
-    public function __construct($master, $operator, $value, Criteria $set)
+    public function __construct(string $dispatcher, string $operator, mixed $value, Criteria $set)
     {
-        $this->master = $master;
+        $this->dispatcher = $dispatcher;
         $this->operator = $operator;
         $this->value = $value;
         $this->set = $set;
     }
 
-    /**
-     * Accessor for the master field
-     * @return string
-     */
-    public function getMaster()
+    public function getDispatcher(): string
     {
-        return $this->master;
+        return $this->dispatcher;
     }
 
-    /**
-     * @return $this
-     */
-    public function setMaster($fieldName)
+    public function setDispatcher(string $fieldName): Criterion
     {
-        $this->master = $fieldName;
+        $this->dispatcher = $fieldName;
+
         return $this;
     }
 
     /**
      * Creates a JavaScript-readable representation of this criterion
-     * @return string
      */
-    public function toScript()
+    public function toScript(): string
     {
         return sprintf(
             "this.findHolder('%s').evaluate%s('%s')",
-            $this->master,
+            $this->dispatcher,
             $this->operator,
             addslashes($this->value ?? '')
         );
