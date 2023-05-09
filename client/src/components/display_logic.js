@@ -48,6 +48,17 @@ jQuery.entwine('ss', ($) => {
 
 
   $('div.display-logic, div.display-logic-master').entwine({
+    InPureModal: null,
+
+    getInPureModal() {
+        const l = this._super();
+        if (l !== null) {
+            return l;
+        }
+        const result = this.closest('.pure-modal').length;
+        this.setInPureModal(result);
+        return result;
+    },
 
     escapeSelector(selector) {
       return selector.replace(/(\[)/g, '_').replace(/(\])/g, '');
@@ -65,11 +76,13 @@ jQuery.entwine('ss', ($) => {
         name = this.escapeSelector(name);
       }
 
-      if (this.find(`[name=${name}]`).length) {
-        return this.find(`[name=${name}]`);
+      const foundByName = this.find(`[name=${name}]:not(:radio)`);
+      if (foundByName.length) {
+        return foundByName;
       }
 
-      return this.find(`#${this.getFormID()}_${name}`);
+      const findSelector = this.getInPureModal() ? `#${name}` : `#${this.getFormID()}_${name}`;
+      return this.find(findSelector);
     },
 
     getFieldName() {
@@ -95,7 +108,9 @@ jQuery.entwine('ss', ($) => {
       // if (this.closest('form').find(`ul.optionset li input[name=${holderName}]:first`).length) {
       //   return holderName;
       // }
-      return `${this.getFormID()}_${holderName}_Holder`;
+      return this.getInPureModal()
+        ? `${holderName}_Holder`
+        : `${this.getFormID()}_${holderName}_Holder`;
     },
 
     getFormID() {
