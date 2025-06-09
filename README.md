@@ -1,4 +1,4 @@
-# Display Logic Module for SilverStripe 4
+# Display Logic Module for SilverStripe
 
 ## Description
 The Display Logic module allows you to add conditions for displaying or hiding certain form fields based on client-side behavior.

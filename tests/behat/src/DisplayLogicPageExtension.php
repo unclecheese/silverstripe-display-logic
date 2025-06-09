@@ -4,7 +4,7 @@ namespace UncleCheese\DisplayLogic\Tests\Behaviour;
 
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\CMS\Model\SiteTreeExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DropdownField;
@@ -16,7 +16,7 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TextField;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
 
-class DisplayLogicPageExtension extends SiteTreeExtension
+class DisplayLogicPageExtension extends Extension
 {
     public function updateCMSFields(FieldList $fields)
     {
