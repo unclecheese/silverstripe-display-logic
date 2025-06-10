@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@silverstripe/webpack-config": "^2.0.0-alpha9",
-    "webpack": "^5.74.0",
+    "webpack": "^5.94.0",
     "webpack-cli": "^5.0.0"
   },
   "resolutions": {
