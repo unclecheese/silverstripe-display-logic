@@ -31,9 +31,10 @@ class Criteria
     protected const LOGIC_AND = 'and';
 
     /**
-     * The name of the form field that depends on the criteria
+     * The form field that depends on the criteria, or its name.
+     * A field is resolved to its name only when the logic is rendered, so it survives a rename.
      */
-    protected string $dispatcher;
+    protected string|FormField $dispatcher;
 
     /**
      * The form field that responds to the state of {@link $dispatcher}
@@ -76,10 +77,10 @@ class Criteria
 
     /**
      * @param FormField $responder The form field that responds to changes of another form field
-     * @param string $dispatcher The name of the form field to respond to
+     * @param string|FormField $dispatcher The form field to respond to, or its name
      * @param Criteria|null $parent The parent
      */
-    public function __construct(FormField $responder, string $dispatcher, ?Criteria $parent = null)
+    public function __construct(FormField $responder, string|FormField $dispatcher, ?Criteria $parent = null)
     {
         $this->responder = $responder;
         $this->dispatcher = $dispatcher;
@@ -138,9 +139,9 @@ class Criteria
     /**
      * Adds a new criterion, and makes this set use conjuctive logic
      *
-     * @param string|null $dispatcher The name of the form field that depends on the criteria
+     * @param string|FormField|null $dispatcher The form field that depends on the criteria, or its name
      */
-    public function andIf(?string $dispatcher = null): Criteria
+    public function andIf(string|FormField|null $dispatcher = null): Criteria
     {
         if ($this->logicalOperator === self::LOGIC_OR) {
             user_error("Criteria: Cannot declare a logical operator more than once. (Specified andIf() after calling orIf()). Use a nested DisplayLogicCriteriaSet to combine conjunctive and disjuctive logic.", E_USER_ERROR);
@@ -158,9 +159,9 @@ class Criteria
     /**
      * Adds a new criterion, and makes this set use disjunctive logic
      *
-     * @param string|null $dispatcher The name of the form field that depends on the criteria
+     * @param string|FormField|null $dispatcher The form field that depends on the criteria, or its name
      */
-    public function orIf(?string $dispatcher = null): Criteria
+    public function orIf(string|FormField|null $dispatcher = null): Criteria
     {
         if ($this->logicalOperator === self::LOGIC_AND) {
             user_error("Criteria: Cannot declare a logical operator more than once. (Specified orIf() after calling andIf()). Use a nested DisplayLogicCriteriaSet to combine conjunctive and disjuctive logic.", E_USER_ERROR);
@@ -201,12 +202,15 @@ class Criteria
         return $this->logicalOperator === self::LOGIC_OR ? "||" : "&&";
     }
 
+    /**
+     * The name of the dispatcher field, as it is named now
+     */
     public function getDispatcher(): string
     {
-        return $this->dispatcher;
+        return $this->dispatcher instanceof FormField ? $this->dispatcher->getName() : $this->dispatcher;
     }
 
-    public function setDispatcher(string $fieldName): Criteria
+    public function setDispatcher(string|FormField $fieldName): Criteria
     {
         $this->dispatcher = $fieldName;
         $criteria = $this->getCriteria();
