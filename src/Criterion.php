@@ -13,6 +13,7 @@ namespace UncleCheese\DisplayLogic;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Forms\FormField;
 
 class Criterion
 {
@@ -24,9 +25,10 @@ class Criterion
     use Configurable;
 
     /**
-     * The name of the form field that is controlling the display
+     * The form field that is controlling the display, or its name.
+     * A field is resolved to its name only when the logic is rendered, so it survives a rename.
      */
-    protected string $dispatcher;
+    protected string|FormField $dispatcher;
 
     /**
      * The comparison function to use, e.g. "EqualTo"
@@ -45,12 +47,12 @@ class Criterion
 
     /**
      * Constructor
-     * @param string $dispatcher The name of the form field that is controlling the display
+     * @param string|FormField $dispatcher The form field that is controlling the display, or its name
      * @param string $operator The name of the comparison function
      * @param mixed $value The value to compare to
      * @param Criteria $set The parent criteria set
      */
-    public function __construct(string $dispatcher, string $operator, mixed $value, Criteria $set)
+    public function __construct(string|FormField $dispatcher, string $operator, mixed $value, Criteria $set)
     {
         $this->dispatcher = $dispatcher;
         $this->operator = $operator;
@@ -58,12 +60,15 @@ class Criterion
         $this->set = $set;
     }
 
+    /**
+     * The name of the dispatcher field, as it is named now
+     */
     public function getDispatcher(): string
     {
-        return $this->dispatcher;
+        return $this->dispatcher instanceof FormField ? $this->dispatcher->getName() : $this->dispatcher;
     }
 
-    public function setDispatcher(string $fieldName): Criterion
+    public function setDispatcher(string|FormField $fieldName): Criterion
     {
         $this->dispatcher = $fieldName;
 
@@ -77,7 +82,7 @@ class Criterion
     {
         return sprintf(
             "this.findHolder('%s').evaluate%s('%s')",
-            $this->dispatcher,
+            $this->getDispatcher(),
             $this->operator,
             addslashes($this->value ?? '')
         );
