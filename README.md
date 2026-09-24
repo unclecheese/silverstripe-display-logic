@@ -150,6 +150,21 @@ $fields->addFieldToTab("Root.Main", Wrapper::create(
 );
 ```
 
+## Renaming fields after declaring display logic
+A field keeps its display logic when it is renamed with `setName()` after `displayIf()` and friends were called on it.
+
+The controlling field can be passed as an object instead of a name. It is then resolved to its name when the form is rendered, so the rule keeps working if that field is renamed later, for example when a form prefixes the names of reused fields:
+```php
+$master = CheckboxField::create('HasAddress');
+$street = TextField::create('Street');
+$street->displayIf($master)->isChecked()->end();
+
+// Later, e.g. to avoid a name collision on a second form
+$master->setName('Billing_HasAddress');
+$street->setName('Billing_Street');
+```
+The same applies to `hideIf()`, `displayUnless()`, `hideUnless()`, `andIf()`, `orIf()` and `setDispatcher()`. Passing a name works exactly as before.
+
 ## What's the difference between displayIf() and hideUnless()?
 Not much. hideUnless() will take a CSS class that hides it by default before the script loads, to eliminate any flash of form fields before the script has loaded. In general, use displayIf() when the common case is for the field to be hidden, and hideUnless() when the common case is for the field to be shown.
 The same logic applies to hideIf() and displayUnless().
